@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group Idea Board</title>
+
+<style>
+
+:root{
+--dark-blue:#0f1f3d;
+--primary-blue:#1e3a8a;
+--light-blue:#3b5edb;
+--border-color:#dcdde1;
+}
+
+/* BODY */
+
+body{
+margin:0;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color:var(--dark-blue);
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+/* HEADER */
+
+.main-header{
+text-align:center;
+color:white;
+padding:35px 10px 10px 10px;
+}
+
+/* LOGO IMAGE */
+
+.logo{
+width:100px;
+height:100px;
+margin:auto;
+}
+
+.logo img{
+width:100%;
+height:100%;
+object-fit:contain;
+}
+
+/* INSTITUTE BADGE */
+
+.badge{
+display:inline-block;
+background:#ffffff;
+color:#1e3a8a;
+padding:6px 14px;
+border-radius:20px;
+font-size:13px;
+font-weight:600;
+margin-top:12px;
+box-shadow:0 3px 10px rgba(0,0,0,0.3);
+}
+
+/* HEADER TEXT */
+
+.main-header h1{
+margin:12px 0 5px 0;
+font-size:30px;
+}
+
+.main-header p{
+margin:0;
+font-size:14px;
+opacity:0.9;
+}
+
+/* MAIN CONTAINER */
+
+.container{
+width:90%;
+max-width:800px;
+background:white;
+border-radius:10px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+overflow:hidden;
+margin:35px 0;
+}
+
+/* BOARD TITLE */
+
+.board-header{
+background:#eef2ff;
+padding:15px;
+text-align:center;
+font-size:22px;
+font-weight:500;
+color:#1e3a8a;
+}
+
+/* INPUT SECTION */
+
+.input-section{
+padding:20px;
+display:flex;
+gap:10px;
+border-bottom:1px solid var(--border-color);
+}
+
+select,input{
+padding:10px;
+border:1px solid var(--border-color);
+border-radius:5px;
+font-size:14px;
+}
+
+select{
+width:30%;
+}
+
+input{
+flex-grow:1;
+}
+
+button{
+background-color:var(--primary-blue);
+color:white;
+border:none;
+padding:10px 25px;
+border-radius:5px;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background-color:var(--light-blue);
+}
+
+/* IDEA LIST */
+
+.idea-list{
+padding:20px;
+min-height:200px;
+list-style:none;
+margin:0;
+}
+
+.idea-item{
+margin-bottom:15px;
+font-size:16px;
+display:flex;
+align-items:center;
+}
+
+.idea-item::before{
+content:"💡";
+margin-right:10px;
+}
+
+.suggested-by{
+font-style:italic;
+color:#666;
+margin-left:5px;
+}
+
+.name-bold{
+font-weight:bold;
+color:#333;
+}
+
+/* FOOTER */
+
+.footer{
+width:100%;
+text-align:center;
+padding:18px;
+color:white;
+font-size:14px;
+margin-top:auto;
+background:#08142b;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header class="main-header">
+
+<div class="logo">
+<!-- Uploaded ABC ICT Institute Logo -->
+<img src="C:\Users\Dehemi Apsara\Downloads\ChatGPT Image Mar 9, 2026, 02_40_22 PM.png" alt="ABC ICT Logo">
+</div>
+
+<div class="badge">ABC Institute of ICT</div>
+
+<h1>Group Collaboration Board</h1>
+<p>Share and collect creative ideas with your team</p>
+
+</header>
+
+<!-- IDEA BOARD -->
+
+<div class="container">
+
+<div class="board-header">
+Group Idea Board
+</div>
+
+<div class="input-section">
+
+<select id="nameSelect">
+<option value="" disabled selected>Select your name...</option>
+<option value="Nimal">Kavija</option>
+<option value="Sara">Sheron</option>
+<option value="Alex">Asanka</option>
+<option value="Guest">Piumal</option>
+<option value="Nimal">Apsara</option>
+<option value="Sara">Vinuki</option>
+<option value="Alex">Hiruni</option>
+<option value="Guest">Rsmiru</option>
+</select>
+
+<input type="text" id="ideaInput" placeholder="Enter your idea here...">
+
+<button onclick="addIdea()">Add Idea</button>
+
+</div>
+
+<ul class="idea-list" id="ideaList">
+
+<li class="idea-item">
+Build a study planner –
+<span class="suggested-by">suggested by <span class="name-bold">Kavija</span></span>
+</li>
+
+<li class="idea-item">
+Start a podcast –
+<span class="suggested-by">suggested by <span class="name-bold">Sheron</span></span>
+</li>
+
+<li class="idea-item">
+Organize a coding workshop –
+<span class="suggested-by">suggested by <span class="name-bold">Asanka</span></span>
+</li>
+
+</ul>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+© 2026 ABC Institute | Group Idea Board Project
+</footer>
+
+<script>
+
+function addIdea(){
+
+const nameSelect=document.getElementById('nameSelect');
+const ideaInput=document.getElementById('ideaInput');
+const ideaList=document.getElementById('ideaList');
+
+const name=nameSelect.value;
+const idea=ideaInput.value.trim();
+
+if(!name){
+alert("Please select a name!");
+return;
+}
+
+if(!idea){
+alert("Please enter an idea!");
+return;
+}
+
+const li=document.createElement('li');
+li.className='idea-item';
+
+li.innerHTML=`${idea} – 
+<span class="suggested-by">
+suggested by <span class="name-bold">${name}</span>
+</span>`;
+
+ideaList.appendChild(li);
+
+ideaInput.value='';
+
+}
+
+</script>
+
+</body>
+</html>
