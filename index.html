@@ -4,166 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Idea Board</title>
-    <style>
-        :root {
-            --primary-blue: #4a69bd;
-            --hover-blue: #3c55a5;
-            --bg-gray: #f4f7f6;
-            --border-color: #dcdde1;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-gray);
-            display: flex;
-            justify-content: center;
-            padding-top: 50px;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 800px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Header */
-        .header {
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 500;
-        }
-
-        /* Input Area */
-        .input-section {
-            padding: 20px;
-            display: flex;
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
-            background: #fff;
-        }
-
-        select, input {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        select { width: 30%; color: #555; }
-        input { flex-grow: 1; }
-
-        button {
-            background-color: var(--primary-blue);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background-color: var(--hover-blue);
-        }
-
-        /* List Area */
-        .idea-list {
-            padding: 20px;
-            min-height: 200px;
-            list-style: none;
-            margin: 0;
-        }
-
-        .idea-item {
-            margin-bottom: 15px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-        }
-
-        .idea-item::before {
-            content: "•";
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
-        .suggested-by {
-            font-style: italic;
-            color: #666;
-            margin-left: 5px;
-        }
-
-        .name-bold {
-            font-weight: bold;
-            color: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="container">
-    <div class="header">Group Idea Board</div>
-    
-    <div class="input-section">
-        <select id="nameSelect">
-            <option value="" disabled selected>Select your name...</option>
-            <option value="Nimal">Nimal</option>
-            <option value="Sara">Sara</option>
-            <option value="Alex">Alex</option>
-            <option value="Guest">Guest</option>
-        </select>
-        
-        <input type="text" id="ideaInput" placeholder="Enter your idea here...">
-        
-        <button onclick="addIdea()">Add Idea</button>
+    <div class="noise-overlay"></div>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
     </div>
 
-    <ul class="idea-list" id="ideaList">
-        <li class="idea-item">Build a study planner – <span class="suggested-by">suggested by <span class="name-bold">Nimal</span></span></li>
-        <li class="idea-item">Start a podcast – <span class="suggested-by">suggested by <span class="name-bold">Sara</span></span></li>
-        <li class="idea-item">Organize a coding workshop – <span class="suggested-by">suggested by <span class="name-bold">Alex</span></span></li>
-    </ul>
-</div>
+    <!-- ── Name Entry Screen ── -->
+    <div id="name-screen" class="name-screen">
+        <div class="name-card">
+            <div class="name-card-icon">💡</div>
+            <h2>Welcome to the<br><span>Idea Board</span></h2>
+            <p class="name-card-sub">Enter your name to start sharing ideas with your group.</p>
+            <div class="name-input-row">
+                <input type="text" id="name-input" placeholder="Your name..." maxlength="30" autocomplete="off" autofocus>
+                <button id="join-btn">Join →</button>
+            </div>
+            <div id="name-error" class="name-error hidden">Please enter a name to continue.</div>
+            <div id="existing-members" class="existing-members hidden">
+                <p class="members-label">Already on the board:</p>
+                <div id="members-chips" class="members-chips"></div>
+            </div>
+        </div>
+    </div>
 
-<script>
-    function addIdea() {
-        const nameSelect = document.getElementById('nameSelect');
-        const ideaInput = document.getElementById('ideaInput');
-        const ideaList = document.getElementById('ideaList');
+    <!-- ── Main Board ── -->
+    <div id="board-screen" class="board-screen hidden">
+        <div class="idea-board">
+            <div class="header">
+                <div class="header-left">
+                    <div class="live-pill"><span class="live-dot"></span>live</div>
+                    <h1>Idea Board</h1>
+                </div>
+                <div class="header-right">
+                    <div class="idea-count-display">
+                        <span id="idea-count">0</span>
+                        <span class="count-label">ideas</span>
+                    </div>
+                </div>
+            </div>
 
-        const name = nameSelect.value;
-        const idea = ideaInput.value.trim();
+            <div class="input-area">
+                <div class="people-row">
+                    <span class="people-label">Posting as</span>
+                    <div class="active-user-chip" id="active-user-chip">
+                        <span class="active-user-avatar" id="active-user-avatar">?</span>
+                        <span class="active-user-name" id="active-user-name">You</span>
+                    </div>
+                    <div class="user-avatars" id="user-avatars"></div>
+                    <button class="add-member-btn" id="add-member-btn" title="Add another person">+ Add member</button>
+                </div>
 
-        // Validation
-        if (!name) {
-            alert("Please select a name!");
-            return;
-        }
-        if (!idea) {
-            alert("Please enter an idea!");
-            return;
-        }
+                <div class="input-row">
+                    <input type="text" id="idea-text" placeholder="What's your big idea?" maxlength="120" autocomplete="off">
+                    <button id="add-btn" aria-label="Add idea">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><line x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+                        Add Idea
+                    </button>
+                </div>
 
-        // Create new list item
-        const li = document.createElement('li');
-        li.className = 'idea-item';
-        li.innerHTML = `${idea} – <span class="suggested-by">suggested by <span class="name-bold">${name}</span></span>`;
+                <div class="input-footer">
+                    <span id="char-count" class="char-count">0 / 120</span>
+                    <div class="filter-tabs" id="filter-tabs">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                    </div>
+                </div>
+            </div>
 
-        // Add to list
-        ideaList.appendChild(li);
+            <div class="sort-bar">
+                <span class="sort-label">Sort:</span>
+                <button class="sort-btn active" data-sort="newest">Newest</button>
+                <button class="sort-btn" data-sort="oldest">Oldest</button>
+                <button class="sort-btn" data-sort="top">Top Voted</button>
+            </div>
 
-        // Clear input field
-        ideaInput.value = '';
-    }
-</script>
+            <ul id="idea-list"></ul>
 
+            <div id="empty-state" class="empty-state hidden">
+                <div class="empty-icon">💡</div>
+                <p>No ideas here yet. Share the first one!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div id="member-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <h3>Add a member</h3>
+            <p>Enter the name of someone joining the board.</p>
+            <div class="modal-input-row">
+                <input type="text" id="modal-name-input" placeholder="Their name..." maxlength="30" autocomplete="off">
+                <button id="modal-add-btn">Add</button>
+            </div>
+            <div id="modal-error" class="name-error hidden">Please enter a name.</div>
+            <button class="modal-close" id="modal-close">✕</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
