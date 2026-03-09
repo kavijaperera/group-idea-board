@@ -3,165 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Idea Board</title>
+    <title>UCSC Idea Board</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-blue: #4a69bd;
-            --hover-blue: #3c55a5;
-            --bg-gray: #f4f7f6;
-            --border-color: #dcdde1;
+            --navy: #003366;
+            --gold: #ffc107;
+            --light-bg: #f8f9fa;
+            --border: #dfe6e9;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-gray);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            margin: 0;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            padding-top: 50px;
+            align-items: center;
+            background: linear-gradient(135deg, #1e272e 0%, #003366 100%);
         }
 
         .container {
-            width: 90%;
-            max-width: 800px;
+            width: 95%;
+            max-width: 650px;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
             overflow: hidden;
-            border: 1px solid var(--border-color);
         }
 
-        /* Header */
-        .header {
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 15px;
+        .branding {
+            padding: 35px 25px 20px 25px;
             text-align: center;
-            font-size: 24px;
-            font-weight: 500;
         }
 
-        /* Input Area */
-        .input-section {
-            padding: 20px;
-            display: flex;
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
+        .welcome-text {
+            font-size: 26px;
+            font-weight: 800;
+            color: #000;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .welcome-text span { color: var(--navy); }
+
+        .input-area {
+            padding: 25px 30px;
             background: #fff;
         }
 
-        select, input {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
+        .input-row { 
+            display: flex; 
+            gap: 12px; 
+        }
+
+        .name-wrapper {
+            position: relative;
+            width: 35%;
+        }
+
+        .name-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--navy);
             font-size: 14px;
         }
 
-        select { width: 30%; color: #555; }
-        input { flex-grow: 1; }
+        .name-input {
+            width: 100%;
+            padding: 14px 14px 14px 35px !important;
+        }
 
-        button {
-            background-color: var(--primary-blue);
+        /* Hides the irregular dropdown arrow */
+        input::-webkit-calendar-picker-indicator {
+            display: none !important;
+        }
+
+        input {
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(0,51,102,0.1); }
+
+        .btn-add {
+            background: var(--navy);
             color: white;
             border: none;
-            padding: 10px 25px;
-            border-radius: 4px;
+            padding: 0 25px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.2s;
+            transition: 0.2s;
         }
 
-        button:hover {
-            background-color: var(--hover-blue);
-        }
+        .btn-add:hover { background: #002244; transform: translateY(-2px); }
 
-        /* List Area */
         .idea-list {
-            padding: 20px;
-            min-height: 200px;
-            list-style: none;
-            margin: 0;
+            padding: 0 30px 30px 30px;
+            max-height: 380px;
+            overflow-y: auto;
         }
 
-        .idea-item {
-            margin-bottom: 15px;
-            font-size: 16px;
+        .card {
+            background: #fff;
+            border: 1px solid #f1f1f1;
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 12px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
-        .idea-item::before {
-            content: "•";
-            margin-right: 10px;
-            font-weight: bold;
+        .card-text { flex: 1; }
+        .card-text strong { display: block; margin-bottom: 5px; color: #333; }
+        .card-text small { color: #7f8c8d; font-weight: 600; font-size: 11px; text-transform: uppercase; }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            background: var(--light-bg);
+            border-top: 1px solid #eee;
         }
 
-        .suggested-by {
-            font-style: italic;
-            color: #666;
-            margin-left: 5px;
+        .btn-clear {
+            background: transparent;
+            border: 1.5px solid #eb4d4b;
+            color: #eb4d4b;
+            padding: 10px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
         }
 
-        .name-bold {
-            font-weight: bold;
-            color: #333;
-        }
+        .btn-clear:hover { background: #eb4d4b; color: white; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">Group Idea Board</div>
-    
-    <div class="input-section">
-        <select id="nameSelect">
-            <option value="" disabled selected>Select your name...</option>
-            <option value="Nimal">Nimal</option>
-            <option value="Sara">Sara</option>
-            <option value="Alex">Alex</option>
-            <option value="Guest">Guest</option>
-        </select>
-        
-        <input type="text" id="ideaInput" placeholder="Enter your idea here...">
-        
-        <button onclick="addIdea()">Add Idea</button>
+    <div class="branding">
+        <h1 class="welcome-text">Welcome to <span>UCSC</span><br>group idea board</h1>
     </div>
 
-    <ul class="idea-list" id="ideaList">
-        <li class="idea-item">Build a study planner – <span class="suggested-by">suggested by <span class="name-bold">Nimal</span></span></li>
-        <li class="idea-item">Start a podcast – <span class="suggested-by">suggested by <span class="name-bold">Sara</span></span></li>
-        <li class="idea-item">Organize a coding workshop – <span class="suggested-by">suggested by <span class="name-bold">Alex</span></span></li>
-    </ul>
+    <div class="input-area">
+        <div class="input-row">
+            <div class="name-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="userInput" class="name-input" list="nameSuggestions" placeholder="Your Name">
+            </div>
+            
+            <datalist id="nameSuggestions">
+                <option value="Nimal">
+                <option value="Sara">
+                <option value="Alex">
+            </datalist>
+
+            <input type="text" id="ideaInput" style="flex:1" placeholder="Share your idea..." onkeypress="handleKey(event)">
+            <button class="btn-add" onclick="add()"><i class="fa-solid fa-plus"></i></button>
+        </div>
+    </div>
+
+    <div id="list" class="idea-list">
+        <div class="card">
+            <div class="card-text">
+                <strong>Implement a dark mode toggle for the portal.</strong>
+                <small>POSTED BY ALEX</small>
+            </div>
+            <i class="fa-solid fa-paper-plane" style="color:#dfe6e9"></i>
+        </div>
+        <div class="card">
+            <div class="card-text">
+                <strong>Organize a monthly coding hackathon.</strong>
+                <small>POSTED BY SARA</small>
+            </div>
+            <i class="fa-solid fa-paper-plane" style="color:#dfe6e9"></i>
+        </div>
+        <div class="card">
+            <div class="card-text">
+                <strong>Set up a peer-to-peer tutoring system.</strong>
+                <small>POSTED BY NIMAL</small>
+            </div>
+            <i class="fa-solid fa-paper-plane" style="color:#dfe6e9"></i>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button class="btn-clear" onclick="clearAll()"><i class="fa-solid fa-trash-can"></i> Clear All</button>
+    </div>
 </div>
 
 <script>
-    function addIdea() {
-        const nameSelect = document.getElementById('nameSelect');
-        const ideaInput = document.getElementById('ideaInput');
-        const ideaList = document.getElementById('ideaList');
+    // Handles Enter key press
+    function handleKey(e) {
+        if (e.key === 'Enter') {
+            add();
+        }
+    }
 
-        const name = nameSelect.value;
-        const idea = ideaInput.value.trim();
-
-        // Validation
-        if (!name) {
-            alert("Please select a name!");
+    function add() {
+        const u = document.getElementById('userInput').value.trim();
+        const t = document.getElementById('ideaInput').value.trim();
+        
+        if(!u || !t) {
+            alert("Please fill in both your name and an idea!");
             return;
         }
-        if (!idea) {
-            alert("Please enter an idea!");
-            return;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-text">
+                <strong>${t}</strong>
+                <small>POSTED BY ${u.toUpperCase()}</small>
+            </div>
+            <i class="fa-solid fa-paper-plane" style="color:#dfe6e9"></i>
+        `;
+        
+        document.getElementById('list').prepend(card);
+        document.getElementById('ideaInput').value = '';
+    }
+
+    function clearAll() {
+        if(confirm("Delete all current ideas?")) {
+            document.getElementById('list').innerHTML = '';
         }
-
-        // Create new list item
-        const li = document.createElement('li');
-        li.className = 'idea-item';
-        li.innerHTML = `${idea} – <span class="suggested-by">suggested by <span class="name-bold">${name}</span></span>`;
-
-        // Add to list
-        ideaList.appendChild(li);
-
-        // Clear input field
-        ideaInput.value = '';
     }
 </script>
 
