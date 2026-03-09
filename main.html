@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Group Idea Board</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg,#a18cd1,#fbc2eb);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+header{
+    text-align:center;
+    padding:25px;
+    color:white;
+}
+
+header h1{
+    margin:0;
+    font-size:32px;
+}
+
+.logo{
+    font-size:40px;
+}
+
+.container{
+    background:white;
+    width:400px;
+    margin:auto;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+
+.buttons{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+}
+
+button{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.add-btn{
+    background:#6c63ff;
+    color:white;
+}
+
+.add-btn:hover{
+    background:#574fd6;
+}
+
+.clear-btn{
+    background:#e0e0e0;
+}
+
+.clear-btn:hover{
+    background:#cfcfcf;
+}
+
+.idea-list{
+    margin-top:20px;
+}
+
+.idea-item{
+    background:#f7f7f7;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:8px;
+}
+
+.counter{
+    margin-top:10px;
+    font-size:14px;
+    color:#555;
+}
+
+footer{
+    text-align:center;
+    padding:15px;
+    margin-top:auto;
+    color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">💡</div>
+<h1>Group Idea Board</h1>
+</header>
+
+<div class="container">
+
+<label>Enter your idea</label>
+<input type="text" id="ideaInput" placeholder="Example: Create a study planner">
+
+<label>Suggested by</label>
+<input type="text" id="nameInput" placeholder="Your name">
+
+<div class="buttons">
+<button class="add-btn" onclick="addIdea()">Add Idea</button>
+<button class="clear-btn" onclick="clearInput()">Clear</button>
+</div>
+
+<div class="counter">
+Total Ideas: <span id="ideaCount">0</span>
+</div>
+
+<div class="idea-list" id="ideaList">
+</div>
+
+</div>
+
+<footer>
+© 2026 Group Idea Board | Team Project
+</footer>
+
+<script>
+
+let ideaCount = 0;
+
+function addIdea(){
+
+let idea = document.getElementById("ideaInput").value;
+let name = document.getElementById("nameInput").value;
+
+if(idea === "" || name === ""){
+alert("Please enter both idea and name");
+return;
+}
+
+let list = document.getElementById("ideaList");
+
+let newIdea = document.createElement("div");
+newIdea.className = "idea-item";
+newIdea.textContent = idea + " – suggested by " + name;
+
+list.appendChild(newIdea);
+
+ideaCount++;
+document.getElementById("ideaCount").textContent = ideaCount;
+
+clearInput();
+
+}
+
+function clearInput(){
+document.getElementById("ideaInput").value = "";
+document.getElementById("nameInput").value = "";
+}
+
+</script>
+
+</body>
+</html>
