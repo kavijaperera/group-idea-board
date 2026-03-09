@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +19,16 @@
     <!-- ── Name Entry Screen ── -->
     <div id="name-screen" class="name-screen">
         <div class="name-card">
+            <!-- Dark mode toggle on name screen -->
+            <button class="theme-toggle" id="theme-toggle-name" aria-label="Toggle dark mode">
+                <span class="toggle-track">
+                    <span class="toggle-thumb">
+                        <span class="toggle-icon sun">☀️</span>
+                        <span class="toggle-icon moon">🌙</span>
+                    </span>
+                </span>
+            </button>
+
             <div class="name-card-icon">💡</div>
             <h2>Welcome to the<br><span>Idea Board</span></h2>
             <p class="name-card-sub">Enter your name to start sharing ideas with your group.</p>
@@ -43,6 +53,15 @@
                     <h1>Idea Board</h1>
                 </div>
                 <div class="header-right">
+                    <!-- Dark mode toggle in header -->
+                    <button class="theme-toggle" id="theme-toggle-board" aria-label="Toggle dark mode">
+                        <span class="toggle-track">
+                            <span class="toggle-thumb">
+                                <span class="toggle-icon sun">☀️</span>
+                                <span class="toggle-icon moon">🌙</span>
+                            </span>
+                        </span>
+                    </button>
                     <div class="idea-count-display">
                         <span id="idea-count">0</span>
                         <span class="count-label">ideas</span>
