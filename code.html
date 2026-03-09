@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group Idea Board</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    background: linear-gradient(to right,#e3f2fd,#ffffff);
+}
+
+/* Header */
+header{
+    background:#1976d2;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+/* Main container */
+.container{
+    width:80%;
+    margin:auto;
+    margin-top:30px;
+    text-align:center;
+}
+
+/* Input section */
+.input-area{
+    margin-bottom:20px;
+}
+
+input{
+    padding:10px;
+    width:40%;
+    border:1px solid #ccc;
+    border-radius:5px;
+    margin-bottom:5px;
+}
+
+input.name-input{
+    width:20%;
+}
+
+/* Buttons */
+button{
+    padding:10px 15px;
+    border:none;
+    border-radius:5px;
+    margin-left:5px;
+    cursor:pointer;
+}
+
+.add-btn{
+    background:#28a745;
+    color:white;
+}
+
+.clear-btn{
+    background:#dc3545;
+    color:white;
+}
+
+button:hover{
+    opacity:0.85;
+}
+
+/* Idea list */
+.idea-list{
+    list-style:none;
+    padding:0;
+}
+
+.idea-list li{
+    background:white;
+    padding:12px;
+    margin:10px 0;
+    border-radius:6px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Counter */
+.counter{
+    margin-top:15px;
+    font-weight:bold;
+}
+
+/* Footer */
+footer{
+    margin-top:40px;
+    background:#f1f1f1;
+    text-align:center;
+    padding:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Group Idea Board</h1>
+</header>
+
+<div class="container">
+
+<div class="input-area">
+<input type="text" id="personInput" class="name-input" placeholder="Your Name">
+<input type="text" id="ideaInput" placeholder="Enter your idea...">
+<br>
+<button class="add-btn" onclick="addIdea()">Add Idea</button>
+<button class="clear-btn" onclick="clearInput()">Clear</button>
+</div>
+
+<ul class="idea-list" id="ideaList"></ul>
+
+<div class="counter">
+Total Ideas: <span id="ideaCount">0</span>
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 Group Idea Board Project</p>
+</footer>
+
+<script>
+let count = 0;
+
+function addIdea(){
+    let ideaInput = document.getElementById("ideaInput");
+    let personInput = document.getElementById("personInput");
+    
+    let ideaText = ideaInput.value.trim();
+    let personName = personInput.value.trim();
+
+    if(ideaText === ""){
+        alert("Please enter an idea");
+        return;
+    }
+
+    if(personName === ""){
+        alert("Please enter your name");
+        return;
+    }
+
+    let li = document.createElement("li");
+    li.textContent = ideaText + " – suggested by " + personName;
+
+    document.getElementById("ideaList").appendChild(li);
+
+    count++;
+    document.getElementById("ideaCount").textContent = count;
+
+    ideaInput.value = "";
+    personInput.value = "";
+}
+
+function clearInput(){
+    document.getElementById("ideaInput").value = "";
+    document.getElementById("personInput").value = "";
+}
+</script>
+
+</body>
+</html>
