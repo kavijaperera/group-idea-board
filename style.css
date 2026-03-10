@@ -91,31 +91,24 @@ body {
     text-decoration: none;
 }
 
-.logo-img-placeholder {
-    width: 34px; height: 34px;
-    background: var(--ucsc-gold);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+.ucsc-logo-img {
+    height: 38px;
+    width: auto;
+    display: block;
+    /* The logo has a dark background — invert gives clean look on dark navbar */
+    filter: brightness(1.1) contrast(1.05);
+    border-radius: 4px;
 }
 
-.brand-text {
-    display: flex; align-items: baseline; gap: 3px;
-    font-family: var(--font-head);
+/* Slightly increase contrast in dark mode */
+[data-theme="dark"] .ucsc-logo-img {
+    filter: brightness(1.2) contrast(1.1);
 }
 
-.brand-ucsc {
-    color: #fff;
-    font-size: 17px; font-weight: 800;
-    letter-spacing: 0.02em;
-}
-
-.brand-hub {
-    color: var(--ucsc-gold);
-    font-size: 17px; font-weight: 400;
-}
+.logo-img-placeholder,
+.brand-text,
+.brand-ucsc,
+.brand-hub { display: none; }
 
 /* Nav links */
 .navbar-links {
