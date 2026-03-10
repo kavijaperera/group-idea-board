@@ -3,24 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Idea Board</title>
+    <title>UCSC Student Toolkit</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div class="noise-overlay"></div>
-    <div class="bg-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
 
-    <!-- ── Name Entry Screen ── -->
-    <div id="name-screen" class="name-screen">
-        <div class="name-card">
-            <!-- Dark mode toggle on name screen -->
-            <button class="theme-toggle" id="theme-toggle-name" aria-label="Toggle dark mode">
+    <!-- ── Navbar ── -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="ucsc-logo">
+                <img src="C:\Users\ACER\OneDrive\Desktop\New folder\ucsc-logo.png" alt="University of Colombo School of Computing" class="ucsc-logo-img">
+            </div>
+        </div>
+
+        <div class="navbar-links">
+            <button class="nav-btn active" data-page="idea-board">💡 Idea Board</button>
+            <button class="nav-btn" data-page="study-timer">⏱ Study Timer</button>
+            <button class="nav-btn" data-page="gpa-calc">🎓 GPA Calc</button>
+        </div>
+
+        <div class="navbar-right">
+            <button class="theme-toggle" id="theme-toggle-nav" aria-label="Toggle dark mode">
                 <span class="toggle-track">
                     <span class="toggle-thumb">
                         <span class="toggle-icon sun">☀️</span>
@@ -28,88 +34,216 @@
                     </span>
                 </span>
             </button>
-
-            <div class="name-card-icon">💡</div>
-            <h2>Welcome to the<br><span>Idea Board</span></h2>
-            <p class="name-card-sub">Enter your name to start sharing ideas with your group.</p>
-            <div class="name-input-row">
-                <input type="text" id="name-input" placeholder="Your name..." maxlength="30" autocomplete="off" autofocus>
-                <button id="join-btn">Join →</button>
-            </div>
-            <div id="name-error" class="name-error hidden">Please enter a name to continue.</div>
-            <div id="existing-members" class="existing-members hidden">
-                <p class="members-label">Already on the board:</p>
-                <div id="members-chips" class="members-chips"></div>
-            </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- ── Main Board ── -->
-    <div id="board-screen" class="board-screen hidden">
-        <div class="idea-board">
-            <div class="header">
-                <div class="header-left">
-                    <div class="live-pill"><span class="live-dot"></span>live</div>
-                    <h1>Idea Board</h1>
-                </div>
-                <div class="header-right">
-                    <!-- Dark mode toggle in header -->
-                    <button class="theme-toggle" id="theme-toggle-board" aria-label="Toggle dark mode">
-                        <span class="toggle-track">
-                            <span class="toggle-thumb">
-                                <span class="toggle-icon sun">☀️</span>
-                                <span class="toggle-icon moon">🌙</span>
-                            </span>
-                        </span>
-                    </button>
-                    <div class="idea-count-display">
-                        <span id="idea-count">0</span>
-                        <span class="count-label">ideas</span>
+    <!-- ── Main Layout ── -->
+    <div class="app-layout">
+
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">📅 Upcoming Events</h3>
+                <ul class="event-list">
+                    <li class="event-item">
+                        <div class="event-date">Mar 12</div>
+                        <div class="event-info">
+                            <div class="event-name">CS101 Midterm</div>
+                            <div class="event-sub">Porter Hall, 9AM</div>
+                        </div>
+                    </li>
+                    <li class="event-item">
+                        <div class="event-date">Mar 14</div>
+                        <div class="event-info">
+                            <div class="event-name">Project Deadline</div>
+                            <div class="event-sub">Web Dev — 11:59PM</div>
+                        </div>
+                    </li>
+                    <li class="event-item">
+                        <div class="event-date">Mar 17</div>
+                        <div class="event-info">
+                            <div class="event-name">Study Group</div>
+                            <div class="event-sub">McHenry Library, 3PM</div>
+                        </div>
+                    </li>
+                    <li class="event-item">
+                        <div class="event-date">Mar 19</div>
+                        <div class="event-info">
+                            <div class="event-name">Campus Hackathon</div>
+                            <div class="event-sub">Engineering Bldg, 10AM</div>
+                        </div>
+                    </li>
+                    <li class="event-item">
+                        <div class="event-date">Mar 22</div>
+                        <div class="event-info">
+                            <div class="event-name">Finals Week Begins</div>
+                            <div class="event-sub">Good luck! 🍀</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">📊 My Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-num" id="stat-ideas">3</div>
+                        <div class="stat-label">Ideas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="stat-sessions">0</div>
+                        <div class="stat-label">Sessions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="stat-minutes">0</div>
+                        <div class="stat-label">Mins Studied</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="stat-gpa">—</div>
+                        <div class="stat-label">GPA</div>
                     </div>
                 </div>
             </div>
+        </aside>
 
-            <div class="input-area">
-                <div class="people-row">
-                    <span class="people-label">Posting as</span>
-                    <div class="active-user-chip" id="active-user-chip">
-                        <span class="active-user-avatar" id="active-user-avatar">?</span>
-                        <span class="active-user-name" id="active-user-name">You</span>
+        <!-- ── Pages ── -->
+        <main class="main-content">
+
+            <!-- ── Idea Board Page ── -->
+            <section id="page-idea-board" class="page active">
+
+                <!-- Name Entry Screen -->
+                <div id="name-screen" class="name-screen">
+                    <div class="name-card">
+                        <div class="name-card-icon">💡</div>
+                        <h2>Welcome to the<br><span>Idea Board</span></h2>
+                        <p class="name-card-sub">Enter your name to start sharing ideas with your group.</p>
+                        <div class="name-input-row">
+                            <input type="text" id="name-input" placeholder="Your name..." maxlength="30" autocomplete="off" autofocus>
+                            <button id="join-btn">Join →</button>
+                        </div>
+                        <div id="name-error" class="name-error hidden">Please enter a name to continue.</div>
+                        <div id="existing-members" class="existing-members hidden">
+                            <p class="members-label">Already on the board:</p>
+                            <div id="members-chips" class="members-chips"></div>
+                        </div>
                     </div>
-                    <div class="user-avatars" id="user-avatars"></div>
-                    <button class="add-member-btn" id="add-member-btn" title="Add another person">+ Add member</button>
                 </div>
 
-                <div class="input-row">
-                    <input type="text" id="idea-text" placeholder="What's your big idea?" maxlength="120" autocomplete="off">
-                    <button id="add-btn" aria-label="Add idea">
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><line x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-                        Add Idea
-                    </button>
-                </div>
+                <!-- Board -->
+                <div id="board-screen" class="idea-board hidden">
+                    <div class="board-header">
+                        <div class="header-left">
+                            <div class="live-pill"><span class="live-dot"></span>live</div>
+                            <h2 class="section-title">Project Idea Board</h2>
+                        </div>
+                        <div class="header-right">
+                            <div class="idea-count-display">
+                                <span id="idea-count">0</span>
+                                <span class="count-label">ideas</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="input-footer">
-                    <span id="char-count" class="char-count">0 / 120</span>
-                    <div class="filter-tabs" id="filter-tabs">
-                        <button class="filter-btn active" data-filter="all">All</button>
+                    <div class="input-area">
+                        <div class="people-row">
+                            <span class="people-label">Posting as</span>
+                            <div class="active-user-chip" id="active-user-chip">
+                                <span class="active-user-avatar" id="active-user-avatar">?</span>
+                                <span class="active-user-name" id="active-user-name">You</span>
+                            </div>
+                            <div class="user-avatars" id="user-avatars"></div>
+                            <button class="add-member-btn" id="add-member-btn" title="Add another person">+ Add member</button>
+                        </div>
+                        <div class="input-row">
+                            <input type="text" id="idea-text" placeholder="What's your big idea?" maxlength="120" autocomplete="off">
+                            <button id="add-btn" aria-label="Add idea">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><line x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+                                Add Idea
+                            </button>
+                        </div>
+                        <div class="input-footer">
+                            <span id="char-count" class="char-count">0 / 120</span>
+                            <div class="filter-tabs" id="filter-tabs">
+                                <button class="filter-btn active" data-filter="all">All</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sort-bar">
+                        <span class="sort-label">Sort:</span>
+                        <button class="sort-btn active" data-sort="newest">Newest</button>
+                        <button class="sort-btn" data-sort="oldest">Oldest</button>
+                        <button class="sort-btn" data-sort="top">Top Voted</button>
+                    </div>
+
+                    <ul id="idea-list"></ul>
+                    <div id="empty-state" class="empty-state hidden">
+                        <div class="empty-icon">💡</div>
+                        <p>No ideas yet. Share the first one!</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="sort-bar">
-                <span class="sort-label">Sort:</span>
-                <button class="sort-btn active" data-sort="newest">Newest</button>
-                <button class="sort-btn" data-sort="oldest">Oldest</button>
-                <button class="sort-btn" data-sort="top">Top Voted</button>
-            </div>
+            <!-- ── Study Timer Page ── -->
+            <section id="page-study-timer" class="page hidden">
+                <div class="tool-card fade-in-section">
+                    <div class="tool-card-icon">⏱</div>
+                    <h2 class="section-title">Pomodoro Study Timer</h2>
+                    <p class="tool-subtitle">Stay focused with 25-minute work sessions.</p>
 
-            <ul id="idea-list"></ul>
+                    <div class="timer-display" id="timer-display">25:00</div>
+                    <div class="timer-session-label" id="timer-session-label">Ready to focus?</div>
 
-            <div id="empty-state" class="empty-state hidden">
-                <div class="empty-icon">💡</div>
-                <p>No ideas here yet. Share the first one!</p>
-            </div>
-        </div>
+                    <div class="timer-controls">
+                        <button class="timer-btn btn-start" id="timer-start">▶ Start</button>
+                        <button class="timer-btn btn-pause" id="timer-pause" disabled>⏸ Pause</button>
+                        <button class="timer-btn btn-reset" id="timer-reset">↺ Reset</button>
+                    </div>
+
+                    <div class="timer-progress-wrap">
+                        <div class="timer-progress-bar" id="timer-progress"></div>
+                    </div>
+
+                    <div class="session-counter">
+                        <span>Sessions completed:</span>
+                        <strong id="session-count">0</strong>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── GPA Calculator Page ── -->
+            <section id="page-gpa-calc" class="page hidden">
+                <div class="tool-card fade-in-section">
+                    <div class="tool-card-icon">🎓</div>
+                    <h2 class="section-title">GPA Calculator</h2>
+                    <p class="tool-subtitle">Enter your courses to calculate your overall GPA.</p>
+
+                    <div id="gpa-courses">
+                        <div class="gpa-row" data-row="1">
+                            <input class="gpa-input course-name" type="text" placeholder="Course name (optional)">
+                            <input class="gpa-input course-grade" type="text" placeholder="Grade (A, B+, C…)">
+                            <input class="gpa-input course-credits" type="number" placeholder="Credits" min="1" max="6">
+                            <button class="gpa-remove-btn" title="Remove">✕</button>
+                        </div>
+                    </div>
+
+                    <div class="gpa-actions">
+                        <button class="gpa-add-row" id="gpa-add-row">+ Add Course</button>
+                        <button class="gpa-calculate" id="gpa-calculate">Calculate GPA</button>
+                    </div>
+
+                    <div id="gpa-result" class="gpa-result hidden">
+                        <div class="gpa-number" id="gpa-number">0.00</div>
+                        <div class="gpa-label-text" id="gpa-label-text">Your GPA</div>
+                        <div class="gpa-breakdown" id="gpa-breakdown"></div>
+                    </div>
+
+                    <div id="gpa-error" class="name-error hidden">Please enter at least one valid course with grade and credits.</div>
+                </div>
+            </section>
+
+        </main>
     </div>
 
     <!-- Add Member Modal -->
