@@ -32,8 +32,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
         
-        body { background-color: var(--bg-gray); color: var(--text-main); opacity: 0; animation: fadeInPage 0.8s ease forwards; }
-        @keyframes fadeInPage { to { opacity: 1; } }
+        body { background-color: var(--bg-gray); color: var(--text-main); min-height: 100vh; }
 
         /* --- NAVIGATION --- */
         .top-nav {
@@ -54,22 +53,26 @@
         .brand-text { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px; }
         .brand-text span { color: var(--accent-gold); }
 
-        .nav-right { display: flex; align-items: center; gap: 15px; } /* Fixed Alignment */
+        .nav-right { display: flex; align-items: center; gap: 15px; }
         .nav-buttons { display: flex; gap: 8px; }
 
         .nav-btn {
             background: transparent; border: none; color: white;
             padding: 10px 15px; border-radius: 10px; font-weight: 600; cursor: pointer;
-            border-bottom: 3px solid transparent;
         }
 
         .nav-btn:hover { background: var(--nav-hover); transform: translateY(-2px); border-bottom: 3px solid var(--accent-gold); }
-        .nav-btn.active { background: var(--accent-gold); color: var(--primary-maroon); box-shadow: 0 0 15px var(--gold-glow); border-bottom: 3px solid var(--primary-maroon); }
+        .nav-btn.active { background: var(--accent-gold); color: var(--primary-maroon); box-shadow: 0 0 15px var(--gold-glow); }
 
         /* --- LAYOUT --- */
         .main-layout {
             display: grid; grid-template-columns: 280px 1fr;
             max-width: 1200px; margin: 30px auto; gap: 25px; padding: 0 20px;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .nav-container { flex-direction: column; padding: 15px; }
         }
 
         .sidebar { background: var(--card-white); padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content; }
@@ -78,9 +81,18 @@
             padding: 15px; margin-bottom: 12px; background: var(--card-white);
             border-left: 4px solid var(--primary-maroon); border-radius: 8px; cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            word-wrap: break-word;
+            display: flex; justify-content: space-between; align-items: flex-start;
         }
 
         .hover-card:hover { transform: scale(1.04); box-shadow: 0 0 18px var(--gold-glow); border-left-color: var(--accent-gold); }
+
+        .btn-delete {
+            background: none; border: none; color: var(--text-muted);
+            cursor: pointer; padding: 5px; transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover { color: #e74c3c; transform: scale(1.3); filter: drop-shadow(0 0 5px var(--gold-glow)); }
 
         .card-container { background: var(--card-white); border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; }
         .tool-section { display: none; }
@@ -90,7 +102,6 @@
         .big-display { font-size: 5.5rem; font-weight: 800; color: var(--primary-maroon); margin: 20px 0; }
         body.dark-mode .big-display { color: var(--accent-gold); }
 
-        /* --- INTERACTIVE BUTTONS --- */
         .btn-action { 
             padding: 12px 25px; border: none; border-radius: 10px; 
             font-weight: 700; cursor: pointer; color: white;
@@ -101,11 +112,9 @@
         .btn-maroon { background: var(--primary-maroon); }
         .btn-green { background: #27ae60; }
         .btn-red { background: #e74c3c; }
-        .btn-gray { background: #95a5a6; }
 
         input { padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--card-white); color: var(--text-main); }
 
-        /* --- THEME TOGGLE --- */
         .theme-switch { position: relative; display: inline-block; width: 44px; height: 22px; margin-left: 10px; }
         .theme-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.2); border-radius: 34px; }
@@ -129,10 +138,7 @@
                     <button class="nav-btn" onclick="showSection('board', this)">Idea Board</button>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <label class="theme-switch">
-                        <input type="checkbox" id="darkModeToggle">
-                        <span class="slider"></span>
-                    </label>
+                    <label class="theme-switch"><input type="checkbox" id="darkModeToggle"><span class="slider"></span></label>
                     <i id="themeIcon" class="fa-solid fa-sun" style="color: white; font-size: 0.9rem;"></i>
                 </div>
             </div>
@@ -141,12 +147,12 @@
 
     <div class="main-layout">
         <aside class="sidebar">
-            <h4 style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase;">Upcoming Events</h4>
-            <div class="hover-card"><strong>Mar 15</strong><br><small>Python Logic Project</small></div>
-            <div class="hover-card"><strong>Mar 20</strong><br><small>Final Submission</small></div>
-            <div class="hover-card"><strong>Mar 22</strong><br><small>Lab Exam - CS101</small></div>
-            <div class="hover-card"><strong>Mar 28</strong><br><small>UCSC Hackathon Setup</small></div>
-            <div class="hover-card"><strong>Apr 05</strong><br><small>Networking Seminar</small></div>
+            <h4 style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px; text-transform: uppercase;">Upcoming Events</h4>
+            <div class="hover-card"><div><strong>Mar 15</strong><br><small>Python Logic Project</small></div></div>
+            <div class="hover-card"><div><strong>Mar 20</strong><br><small>Final Submission</small></div></div>
+            <div class="hover-card"><div><strong>Mar 22</strong><br><small>Lab Exam - CS101</small></div></div>
+            <div class="hover-card"><div><strong>Mar 28</strong><br><small>UCSC Hackathon Setup</small></div></div>
+            <div class="hover-card"><div><strong>Apr 05</strong><br><small>Networking Seminar</small></div></div>
         </aside>
 
         <main>
@@ -155,9 +161,9 @@
                     <h2 style="font-size: 1.8rem;">⌛ Study Timer</h2>
                     <div class="big-display" id="timerDisplay">25:00</div>
                     <div style="display:flex; justify-content:center; gap:12px;">
-                        <button class="btn-action btn-maroon" id="startBtn" onclick="startTimer()">Start</button>
+                        <button class="btn-action btn-maroon" onclick="startTimer()">Start</button>
                         <button class="btn-action btn-red" onclick="pauseTimer()">Pause</button>
-                        <button class="btn-action btn-gray" onclick="resetTimer()">Reset</button>
+                        <button class="btn-action" style="background:#95a5a6" onclick="resetTimer()">Reset</button>
                     </div>
                 </div>
             </section>
@@ -168,12 +174,12 @@
                     <div id="gpaRows">
                         <div style="display:flex; gap:10px; margin-bottom:15px;">
                             <input type="text" placeholder="Subject" style="flex:1;">
-                            <input type="number" class="grade-input" placeholder="Grade" step="0.1" style="width:80px;">
-                            <input type="number" class="credit-input" placeholder="Credits" style="width:80px;">
+                            <input type="number" class="grade-input" placeholder="G" style="width:80px;">
+                            <input type="number" class="credit-input" placeholder="C" style="width:80px;">
                         </div>
                     </div>
                     <div style="display:flex; justify-content:center; gap:15px;">
-                        <button class="btn-action btn-green" onclick="addGpaRow()">+ Add Row</button>
+                        <button class="btn-action btn-green" onclick="addGpaRow()">+ Row</button>
                         <button class="btn-action btn-maroon" onclick="calculateGPA()">Calculate</button>
                     </div>
                     <div class="big-display" id="gpaResult" style="font-size:3.5rem;">0.00</div>
@@ -185,28 +191,91 @@
                     <h2 style="margin-bottom:20px;">💡 Project Idea Board</h2>
                     <div style="display:flex; gap:10px; margin-bottom:15px;">
                         <input type="text" id="boardUser" placeholder="Your Name" style="width:150px;">
-                        <input type="text" id="boardIdea" placeholder="Enter a new project idea..." style="flex:1;">
+                        <input type="text" id="boardIdea" placeholder="Enter idea..." style="flex:1;">
                         <button class="btn-action btn-maroon" onclick="addIdea()">Add Idea</button>
                     </div>
-                    <div id="ideaContainer" style="text-align: left;">
-                        <div class="hover-card"><strong>AI-Powered Resume Parser for Students</strong><br><small style="color:var(--text-muted); font-size: 0.7rem;">BY ADMIN</small></div>
-                        <div class="hover-card"><strong>Campus Food Delivery Web App</strong><br><small style="color:var(--text-muted); font-size: 0.7rem;">BY ADMIN</small></div>
-                        <div class="hover-card"><strong>Peer-to-Peer Textbook Exchange</strong><br><small style="color:var(--text-muted); font-size: 0.7rem;">BY ADMIN</small></div>
-                        <div class="hover-card"><strong>IoT Based Smart Attendance</strong><br><small style="color:var(--text-muted); font-size: 0.7rem;">BY KAVINDU</small></div>
-                        <div class="hover-card"><strong>Student Budget Tracker (LKR)</strong><br><small style="color:var(--text-muted); font-size: 0.7rem;">BY AMANTHA</small></div>
-                    </div>
+                    <div id="ideaContainer" style="text-align: left;"></div>
                 </div>
             </section>
         </main>
     </div>
 
-    <audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
-
     <script>
-        document.getElementById('darkModeToggle').addEventListener('change', (e) => {
-            document.body.classList.toggle('dark-mode');
-            document.getElementById('themeIcon').className = e.target.checked ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-        });
+        // --- SMART DATA LOGIC ---
+        const defaultIdeas = [
+            { user: "ADMIN", text: "AI-Powered Resume Parser for Students" },
+            { user: "ADMIN", text: "Campus Food Delivery Web App" },
+            { user: "ADMIN", text: "Peer-to-Peer Textbook Exchange" },
+            { user: "KAVINDU", text: "IoT Based Smart Attendance" },
+            { user: "AMANTHA", text: "Student Budget Tracker (LKR)" }
+        ];
+
+        let ideas = [];
+        
+        // This function automatically restores defaults if the board is empty
+        function initializeData() {
+            const stored = localStorage.getItem('ucsc_ideas');
+            const parsed = stored ? JSON.parse(stored) : [];
+            
+            if (parsed.length === 0) {
+                ideas = [...defaultIdeas];
+                localStorage.setItem('ucsc_ideas', JSON.stringify(ideas));
+            } else {
+                ideas = parsed;
+            }
+            renderIdeas();
+        }
+
+        window.onload = () => {
+            initializeData();
+            if(localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').checked = true;
+            }
+        };
+
+        function addIdea() {
+            const user = document.getElementById('boardUser').value.trim() || "Anonymous";
+            let ideaText = document.getElementById('boardIdea').value.trim();
+            if(!ideaText) return;
+            if(ideas.some(i => i.text.toLowerCase() === ideaText.toLowerCase())) { alert("Idea already exists!"); return; }
+
+            ideas.unshift({ user: user, text: ideaText });
+            localStorage.setItem('ucsc_ideas', JSON.stringify(ideas));
+            renderIdeas();
+            document.getElementById('boardIdea').value = '';
+        }
+
+        function deleteIdea(index) {
+            ideas.splice(index, 1);
+            localStorage.setItem('ucsc_ideas', JSON.stringify(ideas));
+            // If the user deletes everything, restore defaults on next reload/refresh
+            renderIdeas();
+        }
+
+        function renderIdeas() {
+            const container = document.getElementById('ideaContainer');
+            container.innerHTML = '';
+            ideas.forEach((item, index) => {
+                const card = document.createElement('div'); card.className = 'hover-card';
+                const contentDiv = document.createElement('div');
+                const strong = document.createElement('strong'); strong.textContent = item.text;
+                const br = document.createElement('br');
+                const small = document.createElement('small');
+                small.textContent = `BY ${item.user.toUpperCase()}`;
+                small.style.color = "var(--text-muted)"; small.style.fontSize = "0.7rem";
+                
+                contentDiv.appendChild(strong); contentDiv.appendChild(br); contentDiv.appendChild(small);
+                
+                const delBtn = document.createElement('button');
+                delBtn.className = 'btn-delete';
+                delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+                delBtn.onclick = (e) => { e.stopPropagation(); deleteIdea(index); };
+                
+                card.appendChild(contentDiv); card.appendChild(delBtn);
+                container.appendChild(card);
+            });
+        }
 
         function showSection(id, btn) {
             document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
@@ -215,15 +284,20 @@
             btn.classList.add('active');
         }
 
+        document.getElementById('darkModeToggle').addEventListener('change', (e) => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', e.target.checked ? 'dark' : 'light');
+        });
+
         let timeLeft = 1500; let timerInt = null;
-        function startTimer() { if(!timerInt) timerInt = setInterval(() => { if(timeLeft <= 0) { clearInterval(timerInt); document.getElementById('alarmSound').play(); alert("Time up!"); resetTimer(); } else { timeLeft--; updateTimerUI(); } }, 1000); }
+        function updateTimerUI() { const m = Math.floor(timeLeft/60); const s = timeLeft%60; document.getElementById('timerDisplay').innerText = `${m}:${s<10?'0':''}${s}`; }
+        function startTimer() { if(!timerInt) timerInt = setInterval(() => { if(timeLeft <= 0) { clearInterval(timerInt); resetTimer(); } else { timeLeft--; updateTimerUI(); } }, 1000); }
         function pauseTimer() { clearInterval(timerInt); timerInt = null; }
         function resetTimer() { pauseTimer(); timeLeft = 1500; updateTimerUI(); }
-        function updateTimerUI() { const m = Math.floor(timeLeft/60); const s = timeLeft%60; document.getElementById('timerDisplay').innerText = `${m}:${s<10?'0':''}${s}`; }
 
         function addGpaRow() {
             const row = document.createElement('div'); row.style = "display:flex; gap:10px; margin-bottom:15px;";
-            row.innerHTML = `<input type="text" placeholder="Subject" style="flex:1; padding:12px; border:1px solid var(--border); border-radius:10px;"> <input type="number" class="grade-input" placeholder="Grade" step="0.1" style="width:80px; padding:12px; border:1px solid var(--border); border-radius:10px;"> <input type="number" class="credit-input" placeholder="Credits" style="width:80px; padding:12px; border:1px solid var(--border); border-radius:10px;">`;
+            row.innerHTML = `<input type="text" placeholder="Subject" style="flex:1;"> <input type="number" class="grade-input" placeholder="G" style="width:80px;"> <input type="number" class="credit-input" placeholder="C" style="width:80px;">`;
             document.getElementById('gpaRows').appendChild(row);
         }
         function calculateGPA() {
@@ -231,16 +305,6 @@
             let totalPts = 0, totalCr = 0;
             grades.forEach((g, i) => { const gv = parseFloat(g.value), cv = parseFloat(credits[i].value); if(!isNaN(gv) && !isNaN(cv)) { totalPts += (gv * cv); totalCr += cv; } });
             document.getElementById('gpaResult').innerText = totalCr > 0 ? (totalPts/totalCr).toFixed(2) : "0.00";
-        }
-
-        function addIdea() {
-            const user = document.getElementById('boardUser').value || "ANONYMOUS";
-            const idea = document.getElementById('boardIdea').value;
-            if(!idea) return;
-            const card = document.createElement('div'); card.className = 'hover-card';
-            card.innerHTML = `<strong>${idea}</strong><br><small style="color:var(--text-muted); font-size: 0.7rem;">BY ${user.toUpperCase()}</small>`;
-            document.getElementById('ideaContainer').prepend(card);
-            document.getElementById('boardIdea').value = '';
         }
     </script>
 </body>
