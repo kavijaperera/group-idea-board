@@ -871,7 +871,7 @@ body {
 .hidden { display: none !important; }
 
 /* ────────────────────────────────────────────────
-   RESPONSIVE
+   RESPONSIVE — TABLET
 ──────────────────────────────────────────────── */
 @media (max-width: 820px) {
     .app-layout { flex-direction: column; padding: 16px 14px 60px; }
@@ -880,12 +880,104 @@ body {
     .stats-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
-@media (max-width: 560px) {
-    .navbar-links .nav-btn { font-size: 11px; padding: 6px 10px; }
-    .brand-text { display: none; }
-    .timer-display { font-size: 56px; }
+/* ────────────────────────────────────────────────
+   RESPONSIVE — MOBILE (≤ 600px)
+──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+
+    /* Navbar: stack logo + controls tightly */
+    .navbar {
+        padding: 0 12px;
+        height: auto;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .navbar-brand { order: 1; }
+
+    .navbar-right { order: 2; margin-left: auto; }
+
+    .navbar-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        gap: 4px;
+        padding-bottom: 4px;
+    }
+
+    .nav-btn { font-size: 12px; padding: 6px 12px; }
+
+    .ucsc-logo-img { height: 30px; }
+
+    /* Layout */
+    .app-layout { padding: 12px 10px 80px; gap: 14px; }
+
+    /* Sidebar: single column */
+    .sidebar { flex-direction: column; gap: 12px; }
+    .sidebar-section { min-width: unset; }
+    .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .stat-num { font-size: 18px; }
+
+    /* Name card */
+    .name-card { padding: 28px 20px; }
+    .name-card h2 { font-size: 22px; }
+    .name-input-row { flex-direction: column; gap: 8px; }
+    .name-input-row input { width: 100%; }
+    #join-btn { width: 100%; padding: 14px; }
+
+    /* Board header */
+    .board-header { padding: 14px 16px 12px; }
+    .section-title { font-size: 17px; }
+
+    /* Input area */
+    .input-area { padding: 14px 14px; gap: 10px; }
+
+    /* People row — wrapping */
+    .people-row { gap: 6px; }
+    .add-member-btn { font-size: 11px; padding: 4px 10px; }
+
+    /* Idea input row — stack on mobile */
+    .input-row { flex-direction: column; gap: 8px; }
+    #idea-text { width: 100%; font-size: 15px; }
+    #add-btn { width: 100%; justify-content: center; padding: 13px 16px; font-size: 14px; }
+
+    /* Sort bar */
+    .sort-bar { padding: 8px 14px; gap: 4px; flex-wrap: wrap; }
+
+    /* Idea list */
+    #idea-list { padding: 12px 12px 20px; gap: 8px; }
+
+    /* Idea items */
+    .idea-item { padding: 12px 12px; gap: 10px; }
+    .item-text { font-size: 14px; }
+    .delete-btn { opacity: 1; } /* always visible on mobile */
+
+    /* Tool cards */
+    .tool-card { padding: 24px 16px; }
+    .timer-display { font-size: 60px; }
+    .timer-controls { gap: 8px; }
+    .timer-btn { padding: 10px 14px; font-size: 13px; }
+
+    /* GPA */
     .gpa-row { flex-wrap: wrap; }
     .course-name { flex: 100%; }
-    .tool-card { padding: 24px 18px; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .course-grade, .course-credits { flex: 1; min-width: 0; }
+    .gpa-actions { flex-direction: column; gap: 8px; }
+    .gpa-add-row, .gpa-calculate { width: 100%; }
+    .gpa-number { font-size: 52px; }
+
+    /* Modal */
+    .modal { padding: 24px 18px 20px; }
+    .modal-input-row { flex-direction: column; gap: 8px; }
+    #modal-name-input { width: 100%; }
+    #modal-add-btn { width: 100%; padding: 13px; }
+
+    /* Toast — bigger tap area */
+    .toast { font-size: 13px; padding: 10px 20px; bottom: 20px; }
+
+    /* Filter tabs scroll on mobile */
+    .filter-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+    .filter-tabs::-webkit-scrollbar { display: none; }
 }

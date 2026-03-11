@@ -10,24 +10,61 @@ const COLOR_PALETTE = [
 ];
 
 // ── State ──────────────────────────────────────
-let members = [];
-let ideas   = [
+const STORAGE_KEY_IDEAS   = 'ucsc-toolkit-ideas';
+const STORAGE_KEY_MEMBERS = 'ucsc-toolkit-members';
+const STORAGE_KEY_NEXTID  = 'ucsc-toolkit-nextid';
+const STORAGE_KEY_STATS   = 'ucsc-toolkit-stats';
+
+function loadFromStorage() {
+    try {
+        const savedIdeas = localStorage.getItem(STORAGE_KEY_IDEAS);
+        const savedMembers = localStorage.getItem(STORAGE_KEY_MEMBERS);
+        const savedNextId = localStorage.getItem(STORAGE_KEY_NEXTID);
+        const savedStats  = localStorage.getItem(STORAGE_KEY_STATS);
+        return {
+            ideas:   savedIdeas   ? JSON.parse(savedIdeas)   : null,
+            members: savedMembers ? JSON.parse(savedMembers) : null,
+            nextId:  savedNextId  ? parseInt(savedNextId)    : null,
+            stats:   savedStats   ? JSON.parse(savedStats)   : null,
+        };
+    } catch(e) { return {}; }
+}
+
+function saveIdeas() {
+    try { localStorage.setItem(STORAGE_KEY_IDEAS, JSON.stringify(ideas)); } catch(e) {}
+    try { localStorage.setItem(STORAGE_KEY_NEXTID, String(nextId)); } catch(e) {}
+}
+
+function saveMembers() {
+    try { localStorage.setItem(STORAGE_KEY_MEMBERS, JSON.stringify(members)); } catch(e) {}
+}
+
+function saveStats() {
+    try { localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify({ totalMinutesStudied, totalSessions })); } catch(e) {}
+}
+
+const _saved = loadFromStorage();
+
+const DEFAULT_IDEAS = [
     { id:1, text:'AI-Powered Resume Parser for Students', author:'Nimal', votes:4, voted:false, ts: Date.now()-1000*60*60*3 },
     { id:2, text:'Campus Food Delivery Web App',          author:'Sara',  votes:7, voted:false, ts: Date.now()-1000*60*60*2 },
     { id:3, text:'Peer-to-Peer Textbook Exchange',        author:'Alex',  votes:2, voted:false, ts: Date.now()-1000*60*30  },
 ];
 
-let nextId       = 4;
+let members = _saved.members || [];
+let ideas   = _saved.ideas   || DEFAULT_IDEAS;
+let nextId  = _saved.nextId  || 4;
+
 let activeUser   = null;
 let activeFilter = 'all';
 let activeSort   = 'newest';
 let darkMode     = false;
 
 // Stats
-let totalMinutesStudied = 0;
-let totalSessions       = 0;
+let totalMinutesStudied = _saved.stats ? _saved.stats.totalMinutesStudied : 0;
+let totalSessions       = _saved.stats ? _saved.stats.totalSessions       : 0;
 
-['Nimal','Sara','Alex'].forEach(n => addMember(n, false));
+if (!_saved.members) ['Nimal','Sara','Alex'].forEach(n => addMember(n, false));
 
 // ── DOM: Navigation ───────────────────────────
 const navBtns   = document.querySelectorAll('.nav-btn');
@@ -141,6 +178,7 @@ function addMember(name, switchTo = true) {
     const color  = COLOR_PALETTE[members.length % COLOR_PALETTE.length];
     const member = { name: trimmed, color };
     members.push(member);
+    saveMembers();
     if (switchTo) setActiveUser(member);
     return true;
 }
@@ -351,7 +389,17 @@ function addIdea() {
         ideaInput.focus();
         return;
     }
+    // Duplicate check (case-insensitive)
+    const duplicate = ideas.find(i => i.text.toLowerCase() === text.toLowerCase());
+    if (duplicate) {
+        ideaInput.classList.add('shake');
+        setTimeout(() => ideaInput.classList.remove('shake'), 400);
+        showToast('⚠️ This idea already exists!');
+        ideaInput.focus();
+        return;
+    }
     ideas.unshift({ id: nextId++, text, author: activeUser.name, votes: 0, voted: false, ts: Date.now() });
+    saveIdeas();
     ideaInput.value = '';
     charCount.textContent = '0 / 120';
     charCount.classList.remove('warn');
@@ -376,6 +424,7 @@ ideaList.addEventListener('click', e => {
         if (!idea) return;
         idea.voted  = !idea.voted;
         idea.votes += idea.voted ? 1 : -1;
+        saveIdeas();
         renderList();
         if (idea.voted) showToast('Voted! ▲');
     }
@@ -387,6 +436,7 @@ ideaList.addEventListener('click', e => {
             li.classList.add('removing');
             li.addEventListener('animationend', () => {
                 ideas = ideas.filter(i => i.id !== id);
+                saveIdeas();
                 updateCount(); renderList(); renderFilterTabs(); updateSidebarStats();
             }, { once: true });
         }
@@ -465,6 +515,7 @@ function startTimer() {
             totalSessions++;
             totalMinutesStudied += 25;
             sessionCountEl.textContent = totalSessions;
+            saveStats();
             updateSidebarStats();
 
             // Bell notification
