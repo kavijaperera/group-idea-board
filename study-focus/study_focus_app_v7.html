@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyFlow 🌿</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --g1: #059669;
+  --g2: #0284c7;
+  --grad: linear-gradient(135deg, var(--g1), var(--g2));
+  --radius-card: 22px;
+  --radius-btn: 16px;
+  --radius-sm: 12px;
+  --shadow-card: 0 4px 24px rgba(5,150,105,.10);
+  --font: 'Nunito', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+body { margin: 0; padding: 0; }
+
+/* ── Layout ── */
+#sfa {
+  font-family: var(--font);
+  min-height: 100vh;
+  position: relative;
+  padding: 0 0 40px;
+  transition: background .4s;
+}
+.light-bg { background: linear-gradient(135deg,#f0fdf4 0%,#dcfce7 25%,#d1fae5 50%,#bae6fd 80%,#e0f2fe 100%); }
+.dark-bg  { background: linear-gradient(135deg,#0a1628 0%,#0d2137 30%,#0a2e22 60%,#0d1f3c 100%); }
+
+.panel { padding: 16px 18px 0; }
+.header-row { padding: 20px 18px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.app-title { font-size: 30px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; }
+.app-sub { font-size: 12px; font-weight: 700; margin-top: 2px; color: #64748b; }
+
+/* ── Glass ── */
+.glass { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.glass-l { background: rgba(255,255,255,.78); border: 1.5px solid rgba(255,255,255,.92); border-radius: var(--radius-card); box-shadow: var(--shadow-card); }
+.glass-d { background: rgba(15,30,50,.80); border: 1.5px solid rgba(5,150,105,.22); border-radius: var(--radius-card); box-shadow: 0 4px 28px rgba(0,0,0,.35); }
+
+/* ── Gradient text ── */
+.gtext { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* ── Tabs ── */
+.tab-bar { padding: 5px 6px; display: flex; gap: 3px; border-radius: 18px; }
+.tab { background: transparent; border: none; padding: 9px 14px; border-radius: 13px; font-family: var(--font); font-weight: 700; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all .2s; white-space: nowrap; }
+.tab-on-light { background: #fff; position: relative; border: none; box-shadow: 0 2px 8px rgba(5,150,105,.12); }
+.tab-on-light::before { content:''; position:absolute; inset:0; border-radius:13px; padding:2px; background:var(--grad); -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+.tab-on-light-txt { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:800; }
+.tab-on-dark { background:var(--grad); color:#fff !important; box-shadow:0 3px 12px rgba(5,150,105,.3); }
+
+/* ── Buttons ── */
+.btn { font-family: var(--font); font-weight: 800; cursor: pointer; border: none; transition: all .22s; border-radius: var(--radius-btn); font-size: 13.5px; }
+.btn-g { background: var(--grad); color: #fff; box-shadow: 0 3px 14px rgba(5,150,105,.3); }
+.btn-g:hover { filter: brightness(1.08); transform: translateY(-1.5px) scale(1.01); }
+.btn-o-l { background: rgba(255,255,255,.92); border: 2px solid var(--g1); color: var(--g1); padding: 9px 18px; }
+.btn-o-d { background: rgba(5,150,105,.15); border: 2px solid var(--g1); color: var(--g1); padding: 9px 18px; }
+.btn-o-l:hover, .btn-o-d:hover { background: var(--g1); color: #fff; transform: translateY(-1px); }
+.btn-sm { padding: 7px 13px; font-size: 12px; border-radius: var(--radius-sm); }
+
+/* Add Event button */
+.btn-addev { width:100%; background:#fff; border:none; position:relative; border-radius:var(--radius-btn); padding:11px 22px; font-family:var(--font); font-weight:800; font-size:13.5px; cursor:pointer; transition:all .22s; }
+.btn-addev::before { content:''; position:absolute; inset:0; border-radius:var(--radius-btn); padding:2px; background:var(--grad); -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; }
+.btn-addev-txt { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.btn-addev:hover { background:var(--grad); box-shadow:0 3px 14px rgba(5,150,105,.3); transform:translateY(-1px); }
+.btn-addev:hover::before { display:none; }
+.btn-addev:hover .btn-addev-txt { -webkit-text-fill-color:#fff; background:none; }
+
+/* Gradient-border button (gbtn helper) */
+.gbtn { background:#fff; border:none; position:relative; border-radius:var(--radius-btn); padding:11px 22px; font-family:var(--font); font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 2px 10px rgba(5,150,105,.14); transition:all .22s; overflow:hidden; }
+.gbtn-txt { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:800; font-size:14px; }
+.gbtn::before { content:''; position:absolute; inset:0; border-radius:var(--radius-btn); padding:2px; background:var(--grad); -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+.gbtn:hover { background:var(--grad); box-shadow:0 4px 16px rgba(5,150,105,.3); transform:translateY(-1.5px); }
+.gbtn:hover .gbtn-txt { -webkit-text-fill-color:#fff; background:none; }
+.gbtn:hover::before { display:none; }
+
+/* Sound buttons */
+.snd-btn-l { background:#fff; border:none; position:relative; padding:7px 13px; border-radius:var(--radius-sm); font-family:var(--font); font-weight:800; font-size:12px; cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:5px; justify-content:center; }
+.snd-btn-l::before { content:''; position:absolute; inset:0; border-radius:var(--radius-sm); padding:2px; background:var(--grad); -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; }
+.snd-btn-l .snd-txt { background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.snd-btn-l:hover { background:var(--grad); }
+.snd-btn-l:hover .snd-txt { -webkit-text-fill-color:#fff; background:none; }
+.snd-btn-d { background:rgba(5,150,105,.15); color:var(--g1); border:2px solid var(--g1); padding:7px 13px; border-radius:var(--radius-sm); font-family:var(--font); font-weight:800; font-size:12px; cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:5px; justify-content:center; }
+.snd-btn-d:hover { background:var(--g1); color:#fff; }
+.snd-btn-active { background:var(--grad) !important; color:#fff !important; border:none !important; }
+.snd-btn-active .snd-txt { -webkit-text-fill-color:#fff !important; background:none !important; }
+.snd-btn-active::before { display:none; }
+
+/* ── Inputs ── */
+.inp-base { width:100%; padding:10px 13px; border-radius:14px; font-family:var(--font); font-weight:600; font-size:13.5px; outline:none; transition:border-color .2s,box-shadow .2s; -webkit-appearance:none; appearance:none; }
+.inp-l { border:2px solid rgba(5,150,105,.22) !important; background:#ffffff !important; color:#1e293b !important; color-scheme:light !important; -webkit-text-fill-color:#1e293b !important; }
+.inp-l::placeholder { color:#94a3b8 !important; -webkit-text-fill-color:#94a3b8 !important; }
+.inp-d { border:2px solid rgba(5,150,105,.28); background:rgba(255,255,255,.08); color:#e2e8f0; color-scheme:dark; }
+.inp-base:focus { border-color:var(--g1) !important; box-shadow:0 0 0 3px rgba(5,150,105,.12) !important; }
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { opacity:.4; }
+
+.field-lbl { font-size:10px; font-weight:800; margin-bottom:4px; color:#64748b; }
+
+/* ── Toggle ── */
+.tog { position:relative; display:inline-block; width:50px; height:26px; flex-shrink:0; }
+.tog input { opacity:0; width:0; height:0; }
+.sli { position:absolute; cursor:pointer; inset:0; background:#cbd5e1; border-radius:26px; transition:.3s; }
+.sli::before { position:absolute; content:''; height:18px; width:18px; left:4px; bottom:4px; background:#fff; border-radius:50%; transition:.3s; box-shadow:0 1px 4px rgba(0,0,0,.2); }
+input:checked + .sli { background:var(--grad); }
+input:checked + .sli::before { transform:translateX(24px); }
+
+/* ── Calendar ── */
+.cal-day { min-height:56px; padding:5px; border-radius:11px; cursor:pointer; border:2px solid transparent; transition:all .14s; }
+.cal-day:hover { transform:scale(1.05); }
+.ev-dot { width:7px; height:7px; border-radius:50%; display:inline-block; flex-shrink:0; }
+
+/* ── Alerts ── */
+.alert-err  { font-size:12.5px; font-weight:700; color:#dc2626; padding:8px 12px; background:rgba(220,38,38,.08); border-radius:10px; border-left:3px solid #dc2626; }
+.alert-warn { font-size:12.5px; font-weight:700; color:#d97706; padding:8px 12px; background:rgba(217,119,6,.08); border-radius:10px; border-left:3px solid #d97706; }
+
+/* ── Overlays ── */
+.overlay-bg { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:60; padding:20px; background:rgba(0,0,0,.55); backdrop-filter:blur(12px); }
+
+/* ── Breathing card ── */
+.breath-card { padding:36px 44px; text-align:center; max-width:330px; width:92%; }
+.breath-ring-wrap { width:110px; height:110px; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; }
+.breath-ring-outer { width:110px; height:110px; border-radius:50%; background:linear-gradient(135deg,rgba(5,150,105,.18),rgba(2,132,199,.18)); display:flex; align-items:center; justify-content:center; }
+.breath-ring-inner { width:70px; height:70px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; }
+.breath-num { font-size:28px; font-weight:900; color:#fff; font-family:var(--font-mono); }
+.breath-phase { font-size:17px; font-weight:800; color:var(--g1); margin-bottom:18px; }
+.muted-sm { font-size:12.5px; color:#64748b; }
+
+/* ── Level Up card ── */
+.levelup-card { padding:40px 44px; text-align:center; max-width:320px; width:92%; }
+
+/* ── Event modal ── */
+.ev-modal { padding:28px; width:92%; max-width:420px; }
+
+/* ── Toast ── */
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(120px); background:var(--grad); color:#fff; font-family:var(--font); font-weight:800; font-size:13.5px; padding:12px 24px; border-radius:50px; box-shadow:0 6px 24px rgba(5,150,105,.35); z-index:999; transition:transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s; opacity:0; pointer-events:none; white-space:nowrap; }
+.toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+
+/* ── Plant SVG container ── */
+#plant-svg-wrap { display:inline-block; transition:all .4s cubic-bezier(.34,1.56,.64,1); cursor:pointer; }
+#plant-svg-wrap:hover { transform:scale(1.08) rotate(-2deg); }
+
+/* Plant stage progress dots */
+.stage-dots { display:flex; justify-content:center; gap:5px; margin-top:8px; flex-wrap:wrap; }
+.stage-dot { width:9px; height:9px; border-radius:50%; background:rgba(5,150,105,.18); transition:all .3s; cursor:default; }
+.stage-dot.filled { background:var(--grad); box-shadow:0 0 5px rgba(5,150,105,.4); }
+.stage-dot.current { background:var(--grad); box-shadow:0 0 0 3px rgba(5,150,105,.2); transform:scale(1.3); }
+
+/* ── Session ring pulse ── */
+@keyframes ringPulse { 0%,100%{filter:drop-shadow(0 0 0 transparent)} 50%{filter:drop-shadow(0 0 10px rgba(5,150,105,.5))} }
+.ring-active { animation:ringPulse 2s ease-in-out infinite; }
+
+/* ── Animations ── */
+@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+@keyframes popin { 0%{transform:scale(.84);opacity:0} 100%{transform:scale(1);opacity:1} }
+@keyframes breathIn  { 0%{transform:scale(1)} 100%{transform:scale(1.4)} }
+@keyframes breathOut { 0%{transform:scale(1.4)} 100%{transform:scale(1)} }
+@keyframes bounceIn  { 0%{transform:scale(0) rotate(-15deg);opacity:0} 60%{transform:scale(1.25) rotate(5deg)} 100%{transform:scale(1) rotate(0);opacity:1} }
+@keyframes shimmer   { 0%{background-position:200% center} 100%{background-position:-200% center} }
+@keyframes slideUp   { 0%{transform:translateY(14px);opacity:0} 100%{transform:translateY(0);opacity:1} }
+@keyframes leafSway  { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(4deg)} }
+@keyframes sparkle   { 0%,100%{opacity:0;transform:scale(0)} 50%{opacity:1;transform:scale(1)} }
+@keyframes progressFill { from{width:0} }
+
+.float    { animation:floatY 4s ease-in-out infinite; }
+.popin    { animation:popin .28s cubic-bezier(.34,1.56,.64,1) both; }
+.slide-up { animation:slideUp .3s ease both; }
+
+/* ── Streak banner ── */
+.streak-banner { display:flex; align-items:center; gap:8px; padding:8px 14px; background:linear-gradient(135deg,rgba(5,150,105,.1),rgba(2,132,199,.1)); border-radius:12px; border:1.5px solid rgba(5,150,105,.18); font-size:12.5px; font-weight:800; color:var(--g1); }
+
+/* ── Insight cards shimmer loading ── */
+.shimmer { background:linear-gradient(90deg,rgba(5,150,105,.06) 25%,rgba(5,150,105,.14) 50%,rgba(5,150,105,.06) 75%); background-size:400% 100%; animation:shimmer 1.4s infinite; border-radius:16px; }
+
+/* ── Progress bar ── */
+.progress-track { background:rgba(5,150,105,.1); border-radius:99px; height:7px; overflow:hidden; margin-top:6px; }
+.progress-fill  { height:100%; border-radius:99px; background:var(--grad); transition:width .6s cubic-bezier(.34,1.56,.64,1); animation:progressFill .6s ease; }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:rgba(5,150,105,.25); border-radius:8px; }
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div id="sfa" class="light-bg">
+
+  <!-- Session Complete Toast -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <!-- Breathing overlay -->
+  <div id="breath-ov" class="overlay-bg" style="display:none">
+    <div id="breath-card" class="glass glass-l popin breath-card">
+      <div class="gtext" style="font-size:21px;font-weight:900;margin-bottom:6px">Take a Breath 🌬️</div>
+      <div class="muted-sm" style="margin-bottom:22px">Complete this before leaving your session</div>
+      <div class="breath-ring-wrap">
+        <div id="breath-ring" class="breath-ring-outer">
+          <div class="breath-ring-inner">
+            <span id="breath-num" class="breath-num">4</span>
+          </div>
+        </div>
+      </div>
+      <div id="breath-phase" class="breath-phase">Breathe In</div>
+      <button class="btn btn-o-l btn-sm" onclick="cancelBreath()">Stay Focused Instead ✨</button>
+    </div>
+  </div>
+
+  <!-- Level Up overlay -->
+  <div id="levelup-ov" class="overlay-bg" style="display:none">
+    <div id="levelup-card" class="glass glass-l popin levelup-card">
+      <div id="levelup-emoji" style="font-size:64px;margin-bottom:8px;animation:bounceIn .5s cubic-bezier(.34,1.56,.64,1)">🌿</div>
+      <div class="gtext" style="font-size:22px;font-weight:900;margin-bottom:4px">Level Up!</div>
+      <div id="levelup-name" style="font-size:17px;font-weight:800;color:#059669;margin-bottom:6px"></div>
+      <div id="levelup-desc" class="muted-sm" style="margin-bottom:20px;max-width:240px;margin-inline:auto"></div>
+      <button class="btn btn-g" style="padding:11px 28px" onclick="closeLevelUp()">Keep Growing 🚀</button>
+    </div>
+  </div>
+
+  <!-- Add Event overlay -->
+  <div id="ev-ov" class="overlay-bg" style="display:none">
+    <div id="ev-card" class="glass glass-l popin ev-modal">
+      <div class="gtext" style="font-size:20px;font-weight:900;margin-bottom:16px">📅 Add Event</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <input class="inp-base inp-l" id="ev-title" placeholder="Event title…">
+        <input type="date" class="inp-base inp-l" id="ev-date">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+          <div>
+            <div id="st-lbl" class="field-lbl">START TIME</div>
+            <input type="time" class="inp-base inp-l" id="ev-start">
+          </div>
+          <div>
+            <div id="et-lbl" class="field-lbl">END TIME</div>
+            <input type="time" class="inp-base inp-l" id="ev-end">
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px">
+          <span id="col-lbl" class="field-lbl" style="font-size:12.5px">Color:</span>
+          <span id="color-swatches"></span>
+        </div>
+        <div id="ev-err" class="alert-err" style="display:none"></div>
+        <div id="ev-warn" class="alert-warn" style="display:none"></div>
+        <div style="display:flex;gap:9px;margin-top:6px">
+          <button class="btn btn-g" style="flex:1;padding:11px 22px" onclick="saveEvent()">Add Event</button>
+          <button class="btn btn-o-l" id="ev-cancel-btn" onclick="closeEvModal()" style="padding:9px 18px">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="header-row">
+    <div>
+      <div class="gtext app-title">StudyFlow 🌿</div>
+      <div id="hdr-sub" class="app-sub">Your intelligent focus companion</div>
+    </div>
+    <div id="tab-bar" class="glass glass-l tab-bar"></div>
+  </div>
+
+  <div id="panel-focus"    class="panel" style="display:block"></div>
+  <div id="panel-calendar" class="panel" style="display:none"></div>
+  <div id="panel-insights" class="panel" style="display:none"></div>
+  <div id="panel-settings" class="panel" style="display:none"></div>
+
+</div>
+
+<script>
+// ── Persistent Storage ────────────────────────────────────────────────────────
+const STORAGE_KEY = 'studyflow_v6';
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      return { ...defaultState(), ...saved };
+    }
+  } catch(e) { console.warn('State load failed', e); }
+  return defaultState();
+}
+
+function saveState() {
+  try {
+    const { breathStep, breathRunning, breathTimer, running, paused, ...toSave } = S;
+    // also exclude runtime flags
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      ...toSave,
+      running: false,
+      paused: false,
+    }));
+  } catch(e) { console.warn('State save failed', e); }
+}
+
+function defaultState() {
+  return {
+    tab: 'focus', dark: false, strict: false, notif: true, autoBreak: false,
+    phase: 'work', running: false, paused: false,
+    workHrs: 0, workMins: 25, brkHrs: 0, brkMins: 5,
+    mit: '', sessions: 0, focusLog: [],
+    sound: 'none', vol: 0.4,
+    calYear: new Date().getFullYear(), calMonth: new Date().getMonth(), calSel: null,
+    events: [
+      { id: 1, title: 'Morning Study Block', date: new Date().toISOString().slice(0,10), startTime: '09:00', endTime: '10:00', color: '#059669' },
+      { id: 2, title: 'Review Session',      date: new Date().toISOString().slice(0,10), startTime: '14:00', endTime: '15:30', color: '#0284c7' }
+    ],
+    evColor: '#059669',
+    breathStep: 0, breathRunning: false, breathTimer: null,
+    streak: 0, lastSessionDate: null,
+    totalFocusMinutes: 0
+  };
+}
+
+// ── App State ─────────────────────────────────────────────────────────────────
+const S = loadState();
+let timerInterval = null;
+let timeLeft = (S.workHrs * 3600 + S.workMins * 60);
+let audioCtx = null, audioNodes = [], barChart = null;
+
+// ── Plant Stages (0–20 sessions → 10 stages) ─────────────────────────────────
+const PLANT_STAGES = [
+  { sessions: 0,  name: 'Seed',         emoji: '🌰', desc: 'Plant a seed — your journey begins!',           color: '#a16207' },
+  { sessions: 1,  name: 'Seedling',      emoji: '🌱', desc: 'A tiny green shoot breaks the soil.',           color: '#16a34a' },
+  { sessions: 3,  name: 'Sprout',        emoji: '🌿', desc: 'Two leaves reaching for the light.',            color: '#15803d' },
+  { sessions: 5,  name: 'Young Sapling', emoji: '🪴', desc: 'Growing roots and confidence.',                 color: '#166534' },
+  { sessions: 7,  name: 'Sapling',       emoji: '🌳', desc: 'Sturdy and standing tall.',                     color: '#14532d' },
+  { sessions: 9,  name: 'Small Tree',    emoji: '🌲', desc: 'Branches spreading wide.',                      color: '#166534' },
+  { sessions: 11, name: 'Blooming Tree', emoji: '🌸', desc: 'Flowers burst open — beautiful effort!',        color: '#be185d' },
+  { sessions: 14, name: 'Fruit Tree',    emoji: '🍎', desc: 'Your work bears fruit. Incredible!',            color: '#dc2626' },
+  { sessions: 17, name: 'Ancient Tree',  emoji: '🌴', desc: 'A mighty presence. Awe-inspiring.',             color: '#065f46' },
+  { sessions: 19, name: 'Legendary',     emoji: '✨', desc: 'Almost legendary… one more push!',              color: '#7c3aed' },
+  { sessions: 20, name: 'Champion! 🏆',  emoji: '🏆', desc: 'You reached the peak. You are the Champion!',  color: '#d97706' },
+];
+
+function getPlantStage(sessions) {
+  let stage = PLANT_STAGES[0];
+  for (const s of PLANT_STAGES) {
+    if (sessions >= s.sessions) stage = s;
+  }
+  return stage;
+}
+
+function getPlantStageIndex(sessions) {
+  let idx = 0;
+  for (let i = 0; i < PLANT_STAGES.length; i++) {
+    if (sessions >= PLANT_STAGES[i].sessions) idx = i;
+  }
+  return idx;
+}
+
+// ── Plant SVG Generator (10 stages) ──────────────────────────────────────────
+function buildPlantSVG(sessions) {
+  const si = getPlantStageIndex(sessions);
+
+  // Base pot always shown
+  const pot = `
+    <ellipse cx="64" cy="142" rx="32" ry="6" fill="rgba(5,150,105,.14)"/>
+    <path d="M40 122 Q40 142 64 142 Q88 142 88 122" fill="#c2855a"/>
+    <rect x="36" y="110" width="56" height="12" rx="6" fill="#d4956a"/>
+    <ellipse cx="64" cy="110" rx="26" ry="5" fill="#6b4226"/>
+  `;
+
+  // Soil with seed visible at stage 0
+  const seed = si === 0 ? `
+    <ellipse cx="64" cy="108" rx="8" ry="5" fill="#92400e" opacity=".8"/>
+    <ellipse cx="64" cy="107" rx="5" ry="3.5" fill="#78350f"/>
+  ` : '';
+
+  // Stem (stages 1+)
+  const stemTop = 110 - Math.min(si, 9) * 9;
+  const stem = si >= 1 ? `
+    <line x1="64" y1="110" x2="64" y2="${stemTop}" stroke="#22c55e" stroke-width="3.2" stroke-linecap="round"
+      style="animation:leafSway 3s ease-in-out infinite"/>
+  ` : '';
+
+  // Leaves by stage
+  const leafSets = {
+    1: `<ellipse cx="52" cy="96" rx="11" ry="6.5" fill="#16a34a" transform="rotate(-28 52 96)" style="animation:leafSway 3.2s ease-in-out infinite"/>`,
+    2: `
+      <ellipse cx="52" cy="96" rx="11" ry="6.5" fill="#16a34a" transform="rotate(-28 52 96)"/>
+      <ellipse cx="76" cy="89" rx="12" ry="6.5" fill="#15803d" transform="rotate(22 76 89)" style="animation:leafSway 2.8s .2s ease-in-out infinite"/>
+    `,
+    3: `
+      <ellipse cx="52" cy="96" rx="11" ry="6.5" fill="#16a34a" transform="rotate(-28 52 96)"/>
+      <ellipse cx="76" cy="89" rx="12" ry="6.5" fill="#15803d" transform="rotate(22 76 89)"/>
+      <ellipse cx="51" cy="83" rx="10" ry="5.5" fill="#22c55e" transform="rotate(-23 51 83)"/>
+      <ellipse cx="76" cy="76" rx="13" ry="7.5" fill="#16a34a" transform="rotate(18 76 76)"/>
+      <circle cx="64" cy="${stemTop}" r="4.5" fill="#fbbf24"/>
+    `,
+    4: `
+      <ellipse cx="50" cy="97" rx="12" ry="7" fill="#16a34a" transform="rotate(-30 50 97)"/>
+      <ellipse cx="78" cy="90" rx="13" ry="7" fill="#15803d" transform="rotate(25 78 90)"/>
+      <ellipse cx="48" cy="82" rx="11" ry="6" fill="#22c55e" transform="rotate(-22 48 82)"/>
+      <ellipse cx="80" cy="75" rx="12" ry="6.5" fill="#16a34a" transform="rotate(20 80 75)"/>
+      <ellipse cx="64" cy="68" rx="14" ry="8" fill="#15803d"/>
+      <circle cx="64" cy="${stemTop}" r="5" fill="#fbbf24"/>
+    `,
+    5: `
+      <ellipse cx="48" cy="98" rx="13" ry="7.5" fill="#16a34a" transform="rotate(-30 48 98)"/>
+      <ellipse cx="80" cy="91" rx="14" ry="7.5" fill="#14532d" transform="rotate(28 80 91)"/>
+      <ellipse cx="46" cy="83" rx="12" ry="6.5" fill="#22c55e" transform="rotate(-24 46 83)"/>
+      <ellipse cx="82" cy="76" rx="13" ry="7" fill="#166534" transform="rotate(22 82 76)"/>
+      <ellipse cx="64" cy="66" rx="16" ry="10" fill="#15803d"/>
+      <ellipse cx="46" cy="70" rx="12" ry="6" fill="#16a34a" transform="rotate(-16 46 70)"/>
+      <ellipse cx="82" cy="68" rx="12" ry="6" fill="#14532d" transform="rotate(16 82 68)"/>
+    `,
+    6: `
+      <ellipse cx="46" cy="98" rx="14" ry="8" fill="#16a34a" transform="rotate(-32 46 98)"/>
+      <ellipse cx="82" cy="91" rx="15" ry="8" fill="#14532d" transform="rotate(30 82 91)"/>
+      <ellipse cx="44" cy="83" rx="13" ry="7" fill="#22c55e" transform="rotate(-26 44 83)"/>
+      <ellipse cx="84" cy="76" rx="14" ry="7.5" fill="#166534" transform="rotate(24 84 76)"/>
+      <ellipse cx="64" cy="63" rx="18" ry="12" fill="#15803d"/>
+      <ellipse cx="43" cy="68" rx="14" ry="7" fill="#16a34a" transform="rotate(-14 43 68)"/>
+      <ellipse cx="85" cy="66" rx="14" ry="7" fill="#14532d" transform="rotate(14 85 66)"/>
+      <ellipse cx="64" cy="50" rx="14" ry="9" fill="#166534"/>
+    `,
+    7: `
+      <ellipse cx="45" cy="98" rx="14" ry="8" fill="#16a34a" transform="rotate(-32 45 98)"/>
+      <ellipse cx="83" cy="91" rx="15" ry="8" fill="#14532d" transform="rotate(30 83 91)"/>
+      <ellipse cx="42" cy="83" rx="13" ry="7" fill="#22c55e" transform="rotate(-26 42 83)"/>
+      <ellipse cx="86" cy="76" rx="14" ry="7.5" fill="#166534" transform="rotate(24 86 76)"/>
+      <ellipse cx="64" cy="62" rx="19" ry="12" fill="#15803d"/>
+      <ellipse cx="41" cy="67" rx="15" ry="7.5" fill="#16a34a" transform="rotate(-14 41 67)"/>
+      <ellipse cx="87" cy="65" rx="15" ry="7.5" fill="#14532d" transform="rotate(14 87 65)"/>
+      <ellipse cx="64" cy="48" rx="16" ry="10" fill="#166534"/>
+      <!-- Blossoms -->
+      ${[[-14,55],[0,42],[14,55],[20,63],[-20,63]].map(([dx,dy],i)=>`
+        <circle cx="${64+dx}" cy="${dy}" r="5" fill="${['#fb7185','#fda4af','#f9a8d4','#f0abfc','#c4b5fd'][i]}" opacity=".9"/>
+        <circle cx="${64+dx}" cy="${dy}" r="2.5" fill="#fef9c3"/>
+      `).join('')}
+    `,
+    8: `
+      <ellipse cx="44" cy="99" rx="15" ry="8.5" fill="#16a34a" transform="rotate(-33 44 99)"/>
+      <ellipse cx="84" cy="92" rx="16" ry="8.5" fill="#14532d" transform="rotate(31 84 92)"/>
+      <ellipse cx="41" cy="83" rx="14" ry="7.5" fill="#22c55e" transform="rotate(-27 41 83)"/>
+      <ellipse cx="87" cy="76" rx="15" ry="8" fill="#166534" transform="rotate(25 87 76)"/>
+      <ellipse cx="64" cy="61" rx="20" ry="13" fill="#15803d"/>
+      <ellipse cx="40" cy="66" rx="15" ry="8" fill="#16a34a" transform="rotate(-14 40 66)"/>
+      <ellipse cx="88" cy="64" rx="15" ry="8" fill="#14532d" transform="rotate(14 88 64)"/>
+      <ellipse cx="64" cy="46" rx="18" ry="11" fill="#166534"/>
+      <!-- Fruits (apples) -->
+      ${[[-12,52],[5,40],[-5,40],[18,58],[-18,56]].map(([dx,dy],i)=>`
+        <circle cx="${64+dx}" cy="${dy}" r="6" fill="${['#ef4444','#dc2626','#f87171','#dc2626','#ef4444'][i]}"/>
+        <path d="M${64+dx} ${dy-6} Q${64+dx+3} ${dy-10} ${64+dx+2} ${dy-7}" stroke="#16a34a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      `).join('')}
+    `,
+    9: `
+      <ellipse cx="43" cy="100" rx="16" ry="9" fill="#16a34a" transform="rotate(-34 43 100)"/>
+      <ellipse cx="85" cy="93" rx="17" ry="9" fill="#14532d" transform="rotate(32 85 93)"/>
+      <ellipse cx="40" cy="84" rx="15" ry="8" fill="#22c55e" transform="rotate(-28 40 84)"/>
+      <ellipse cx="88" cy="77" rx="16" ry="8.5" fill="#166534" transform="rotate(26 88 77)"/>
+      <ellipse cx="64" cy="60" rx="22" ry="14" fill="#15803d"/>
+      <ellipse cx="38" cy="65" rx="16" ry="9" fill="#16a34a" transform="rotate(-13 38 65)"/>
+      <ellipse cx="90" cy="63" rx="16" ry="9" fill="#14532d" transform="rotate(13 90 63)"/>
+      <ellipse cx="64" cy="44" rx="20" ry="13" fill="#166534"/>
+      <ellipse cx="64" cy="32" rx="15" ry="9" fill="#14532d"/>
+      <!-- Stars approaching champion -->
+      ${[[-20,28],[0,22],[20,28],[28,36],[-28,36]].map(([dx,dy],i)=>`
+        <text x="${64+dx}" y="${dy}" font-size="11" text-anchor="middle" style="animation:sparkle 1.5s ${i*.2}s ease-in-out infinite">⭐</text>
+      `).join('')}
+    `,
+    10: `
+      <ellipse cx="42" cy="101" rx="17" ry="9.5" fill="#16a34a" transform="rotate(-35 42 101)"/>
+      <ellipse cx="86" cy="94" rx="18" ry="9.5" fill="#14532d" transform="rotate(33 86 94)"/>
+      <ellipse cx="39" cy="85" rx="16" ry="8.5" fill="#22c55e" transform="rotate(-29 39 85)"/>
+      <ellipse cx="89" cy="78" rx="17" ry="9" fill="#166534" transform="rotate(27 89 78)"/>
+      <ellipse cx="64" cy="59" rx="24" ry="15" fill="#15803d"/>
+      <ellipse cx="37" cy="64" rx="17" ry="9.5" fill="#16a34a" transform="rotate(-13 37 64)"/>
+      <ellipse cx="91" cy="62" rx="17" ry="9.5" fill="#14532d" transform="rotate(13 91 62)"/>
+      <ellipse cx="64" cy="42" rx="22" ry="14" fill="#166534"/>
+      <ellipse cx="64" cy="28" rx="18" ry="11" fill="#14532d"/>
+      <!-- Golden crown + stars -->
+      <text x="64" y="20" font-size="20" text-anchor="middle">👑</text>
+      ${[[-22,30],[0,20],[22,30],[30,42],[-30,42],[15,15],[-15,15]].map(([dx,dy],i)=>`
+        <text x="${64+dx}" y="${dy}" font-size="12" text-anchor="middle" style="animation:sparkle 1.2s ${i*.15}s ease-in-out infinite">⭐</text>
+      `).join('')}
+    `
+  };
+
+  const leafSVG = leafSets[Math.min(si, 10)] || '';
+
+  return `<svg width="128" height="148" viewBox="0 0 128 148" xmlns="http://www.w3.org/2000/svg">
+    ${pot}
+    ${seed}
+    ${stem}
+    ${leafSVG}
+  </svg>`;
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+let toastTimeout;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  clearTimeout(toastTimeout);
+  t.textContent = msg;
+  t.classList.add('show');
+  toastTimeout = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── Dark mode ─────────────────────────────────────────────────────────────────
+function applyDark() {
+  document.getElementById('sfa').className = S.dark ? 'dark-bg' : 'light-bg';
+  document.querySelectorAll('.glass').forEach(g => {
+    g.classList.toggle('glass-d', S.dark);
+    g.classList.toggle('glass-l', !S.dark);
+  });
+  document.getElementById('hdr-sub').style.color = S.dark ? '#94a3b8' : '#64748b';
+  document.querySelectorAll('[data-muted]').forEach(e => e.style.color = S.dark ? '#94a3b8' : '#64748b');
+  document.querySelectorAll('[data-body]').forEach(e => e.style.color = S.dark ? '#e2e8f0' : '#1e293b');
+  document.querySelectorAll('.inp-base').forEach(i => {
+    if (S.dark) { i.classList.add('inp-d'); i.classList.remove('inp-l'); }
+    else { i.classList.add('inp-l'); i.classList.remove('inp-d'); }
+  });
+  document.querySelectorAll('.field-lbl').forEach(e => e.style.color = S.dark ? '#94a3b8' : '#64748b');
+  document.querySelectorAll('.muted-sm').forEach(e => e.style.color = S.dark ? '#94a3b8' : '#64748b');
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+const TABS = [
+  { id: 'focus',    icon: '⏱️', label: 'Focus' },
+  { id: 'calendar', icon: '📅', label: 'Calendar' },
+  { id: 'insights', icon: '📊', label: 'Insights' },
+  { id: 'settings', icon: '⚙️', label: 'Settings' }
+];
+
+function buildTabBar() {
+  document.getElementById('tab-bar').innerHTML = TABS.map(t => {
+    const on = S.tab === t.id;
+    if (on && !S.dark) {
+      return `<button class="tab tab-on-light" onclick="switchTab('${t.id}')">${t.icon}&nbsp;<span class="tab-on-light-txt">${t.label}</span></button>`;
+    } else if (on && S.dark) {
+      return `<button class="tab tab-on-dark" onclick="switchTab('${t.id}')">${t.icon} ${t.label}</button>`;
+    } else {
+      return `<button class="tab" onclick="switchTab('${t.id}')" style="color:${S.dark ? '#94a3b8' : '#64748b'}">${t.icon} ${t.label}</button>`;
+    }
+  }).join('');
+}
+
+function switchTab(t) {
+  S.tab = t; buildTabBar();
+  TABS.forEach(x => document.getElementById('panel-' + x.id).style.display = x.id === t ? 'block' : 'none');
+  if (t === 'focus') renderFocus();
+  else if (t === 'calendar') { renderCalendar(); renderEventList(); }
+  else if (t === 'insights') renderInsights();
+  else if (t === 'settings') renderSettings();
+  applyDark();
+  saveState();
+}
+
+// ── Gradient-border button helper ─────────────────────────────────────────────
+function gbtn(onclick, label, extraStyle = '') {
+  return `<button class="gbtn" onclick="${onclick}" style="${extraStyle}"><span class="gbtn-txt">${label}</span></button>`;
+}
+
+// ── Focus Panel ───────────────────────────────────────────────────────────────
+function renderFocus() {
+  const tc = S.dark ? '#e2e8f0' : '#1e293b';
+  const mc = S.dark ? '#94a3b8' : '#64748b';
+  const streakHtml = S.streak > 0
+    ? `<div class="streak-banner"><span>🔥 ${S.streak}-day streak</span><span style="font-size:11px;font-weight:600;color:${mc}">Keep it up!</span></div>`
+    : '';
+
+  document.getElementById('panel-focus').innerHTML = `
+  <div style="display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:16px">
+    <div class="glass glass-l" style="padding:22px;grid-column:1/-1">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+        <div>
+          <div class="gtext" style="font-size:23px;font-weight:900">Focus Timer</div>
+          <div id="phase-lbl" data-muted style="font-size:12.5px;font-weight:700;margin-top:3px;color:${mc}">🎯 Work Session · 🍅 Pomodoro</div>
+        </div>
+        ${streakHtml}
+      </div>
+      <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap">
+        <div style="position:relative;flex-shrink:0;cursor:pointer" onclick="toggleTimerExpand()" title="Click to expand">
+          <svg id="timer-svg" width="192" height="192" viewBox="0 0 192 192">
+            <circle cx="96" cy="96" r="80" stroke="rgba(5,150,105,.12)" stroke-width="11" fill="none"/>
+            <circle id="timer-ring" cx="96" cy="96" r="80" stroke="url(#tg)" stroke-width="11" fill="none"
+              stroke-dasharray="502.65" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 96 96)" style="transition:stroke-dashoffset .5s ease"/>
+            <defs><linearGradient id="tg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#0284c7"/>
+            </linearGradient></defs>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+            <div id="timer-disp" class="gtext" style="font-size:40px;font-weight:900;line-height:1;font-family:var(--font-mono,'DM Mono',monospace)">25:00</div>
+            <div id="timer-pct" data-muted style="font-size:11px;font-weight:700;margin-top:3px;color:${mc}">0% elapsed</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:160px">
+          <div id="mit-display" style="display:none;margin-bottom:12px;padding:11px 14px;border-radius:14px;background:rgba(5,150,105,.1);border-left:4px solid #059669">
+            <div style="font-size:10px;font-weight:800;color:#059669;letter-spacing:1px;margin-bottom:3px">🎯 TODAY'S MIT</div>
+            <div id="mit-text" data-body style="font-size:14px;font-weight:700;color:${tc}"></div>
+          </div>
+          <div id="mit-input-wrap" style="margin-bottom:12px">
+            <input class="inp-base inp-l" id="mit-input" placeholder="📝 Most Important Task…" style="padding:10px 13px"
+              onkeydown="if(event.key==='Enter'&&!S.running)startTimer()">
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap" id="ctrl-btns"></div>
+          <div id="strict-warn" style="display:none;margin-top:8px;font-size:11.5px;color:#dc2626;font-weight:700">🔒 Strict Mode — breathing required to stop</div>
+          <div id="dur-cfg" style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <div data-muted style="font-size:10px;font-weight:800;margin-bottom:5px;color:${mc}">WORK DURATION</div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <div style="flex:1">
+                  <div data-muted style="font-size:9px;font-weight:700;margin-bottom:3px;color:#94a3b8">HRS</div>
+                  <input type="number" class="inp-base inp-l" id="work-hrs" value="${S.workHrs}" min="0" max="8"
+                    style="padding:7px 8px;font-size:13px;text-align:center" onchange="updateDur()">
+                </div>
+                <div class="gtext" style="font-size:18px;font-weight:900;padding-top:16px">:</div>
+                <div style="flex:1">
+                  <div data-muted style="font-size:9px;font-weight:700;margin-bottom:3px;color:#94a3b8">MIN</div>
+                  <input type="number" class="inp-base inp-l" id="work-mins" value="${S.workMins}" min="1" max="59"
+                    style="padding:7px 8px;font-size:13px;text-align:center" onchange="updateDur()">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div data-muted style="font-size:10px;font-weight:800;margin-bottom:5px;color:${mc}">BREAK DURATION</div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <div style="flex:1">
+                  <div data-muted style="font-size:9px;font-weight:700;margin-bottom:3px;color:#94a3b8">HRS</div>
+                  <input type="number" class="inp-base inp-l" id="brk-hrs" value="${S.brkHrs}" min="0" max="2"
+                    style="padding:7px 8px;font-size:13px;text-align:center" onchange="updateDur()">
+                </div>
+                <div class="gtext" style="font-size:18px;font-weight:900;padding-top:16px">:</div>
+                <div style="flex:1">
+                  <div data-muted style="font-size:9px;font-weight:700;margin-bottom:3px;color:#94a3b8">MIN</div>
+                  <input type="number" class="inp-base inp-l" id="brk-mins" value="${S.brkMins}" min="0" max="59"
+                    style="padding:7px 8px;font-size:13px;text-align:center" onchange="updateDur()">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Focus Plant -->
+    <div class="glass glass-l" style="padding:20px;text-align:center">
+      <div class="gtext" style="font-size:17px;font-weight:900;margin-bottom:8px">🌱 Focus Plant</div>
+      <div class="float" id="plant-svg-wrap" style="display:inline-block" onclick="showPlantDetails()" title="Click for details"></div>
+      <div id="plant-label" style="font-size:13px;font-weight:800;color:#059669;margin-top:6px"></div>
+      <div id="plant-sessions" data-muted style="font-size:11px;font-weight:600;margin-top:2px;color:${mc}"></div>
+      <div class="stage-dots" id="stage-dots"></div>
+      <div class="progress-track" style="margin-top:8px;max-width:200px;margin-inline:auto">
+        <div class="progress-fill" id="plant-progress-bar" style="width:0%"></div>
+      </div>
+      <div id="plant-progress" style="margin-top:6px;font-size:11px;font-weight:700;color:#059669"></div>
+    </div>
+
+    <!-- Soundscape -->
+    <div class="glass glass-l" style="padding:18px">
+      <div class="gtext" style="font-size:17px;font-weight:900;margin-bottom:12px">🎵 Soundscape</div>
+      <div id="sound-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:7px"></div>
+      <div id="vol-wrap" style="display:none;margin-top:11px">
+        <div data-muted style="font-size:10px;font-weight:800;margin-bottom:5px;color:${mc}">VOLUME</div>
+        <input type="range" id="vol-sl" min="0.05" max="1" step="0.05" value="${S.vol}"
+          style="width:100%;accent-color:#059669" oninput="changeVol(this.value)">
+      </div>
+    </div>
+  </div>`;
+  updateTimerDisplay(); setTimerBtns(); renderPlant(); renderSoundGrid(); applyDark();
+}
+
+function toggleTimerExpand() {
+  const svg = document.getElementById('timer-svg');
+  if (!svg) return;
+  const big = svg.getAttribute('width') === '192';
+  svg.setAttribute('width',  big ? '240' : '192');
+  svg.setAttribute('height', big ? '240' : '192');
+  svg.setAttribute('viewBox', big ? '0 0 192 192' : '0 0 192 192');
+}
+
+function updateDur() {
+  const g = id => +(document.getElementById(id)?.value) || 0;
+  S.workHrs = g('work-hrs'); S.workMins = g('work-mins');
+  S.brkHrs  = g('brk-hrs'); S.brkMins  = g('brk-mins');
+  // Prevent zero work duration
+  if (S.workHrs === 0 && S.workMins === 0) { S.workMins = 1; const el = document.getElementById('work-mins'); if(el) el.value = 1; }
+  if (!S.running && !S.paused) { timeLeft = totalWork(); updateTimerDisplay(); }
+  saveState();
+}
+
+function totalWork()    { return (S.workHrs * 3600 + S.workMins * 60); }
+function totalBreak()   { return (S.brkHrs  * 3600 + S.brkMins  * 60); }
+function totalCurrent() { return S.phase === 'work' ? totalWork() : totalBreak(); }
+
+function fmtTime(s) {
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  if (h > 0) return pad(h) + ':' + pad(m) + ':' + pad(sec);
+  return pad(m) + ':' + pad(sec);
+}
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function updateTimerDisplay() {
+  const total = totalCurrent(), pct = total > 0 ? Math.min(100, Math.round((total - timeLeft) / total * 100)) : 0;
+  const d = document.getElementById('timer-disp');
+  const r = document.getElementById('timer-ring');
+  const p = document.getElementById('timer-pct');
+  if (d) d.textContent = fmtTime(timeLeft);
+  if (r) {
+    r.style.strokeDashoffset = 502.65 * (1 - pct / 100);
+    const svg = document.getElementById('timer-svg');
+    if (S.running && svg) svg.classList.add('ring-active');
+    else if (svg) svg.classList.remove('ring-active');
+  }
+  if (p) p.textContent = pct + '% elapsed';
+  const pl = document.getElementById('phase-lbl');
+  if (pl) pl.textContent = (S.phase === 'work' ? '🎯 Work Session' : '☕ Break Time') + ' · 🍅 Pomodoro';
+  // Update browser tab title
+  if (S.running) document.title = `${fmtTime(timeLeft)} — StudyFlow`;
+  else document.title = 'StudyFlow 🌿';
+}
+
+function setTimerBtns() {
+  const c = document.getElementById('ctrl-btns'); if (!c) return;
+  const sw = document.getElementById('strict-warn');
+  if (sw) sw.style.display = S.strict && (S.running || S.paused) ? 'block' : 'none';
+  const cfg = document.getElementById('dur-cfg');
+  if (cfg) cfg.style.display = S.running ? 'none' : 'grid';
+  const mw = document.getElementById('mit-input-wrap'), md = document.getElementById('mit-display');
+  if (mw) mw.style.display = S.running ? 'none' : 'block';
+  if (md) md.style.display = (S.running || S.paused) && S.mit ? 'flex' : 'none';
+
+  const stopBtn = `<button class="btn ${S.dark ? 'btn-o-d' : 'btn-o-l'} btn-sm" onclick="stopTimer()">✕ Stop</button>`;
+
+  if (S.running) {
+    const pb = S.dark
+      ? `<button class="btn btn-g" onclick="pauseTimer()" style="background:linear-gradient(135deg,#0284c7,#7c3aed);flex:1;padding:11px 22px;color:#fff">⏸ Pause</button>`
+      : gbtn('pauseTimer()', '⏸ Pause', 'flex:1;');
+    c.innerHTML = pb + stopBtn;
+  } else if (S.paused) {
+    const rb = S.dark
+      ? `<button class="btn btn-g" onclick="resumeTimer()" style="flex:1;padding:11px 22px;color:#fff">▶ Resume</button>`
+      : gbtn('resumeTimer()', '▶ Resume', 'flex:1;');
+    c.innerHTML = rb + stopBtn;
+  } else {
+    const sb = S.dark
+      ? `<button class="btn btn-g" onclick="startTimer()" style="flex:1;padding:11px 22px;color:#fff">▶ Start Session</button>`
+      : gbtn('startTimer()', '▶ Start Session', 'flex:1;');
+    c.innerHTML = sb;
+    if (timeLeft < totalCurrent() && timeLeft > 0) {
+      c.innerHTML += (S.dark
+        ? `<button class="btn btn-g" onclick="resumeTimer()" style="padding:11px 22px;color:#fff">▶ Resume</button>`
+        : gbtn('resumeTimer()', '▶ Resume', '')) + stopBtn;
+    }
+  }
+  applyDark();
+}
+
+function startTimer() {
+  const mi = document.getElementById('mit-input');
+  if (!S.mit && !(mi && mi.value.trim())) {
+    showToast('⚠️ Enter your Most Important Task first!');
+    mi && mi.focus();
+    return;
+  }
+  if (mi && mi.value.trim()) S.mit = mi.value.trim();
+  const md = document.getElementById('mit-display'), mt = document.getElementById('mit-text');
+  if (md) md.style.display = 'flex';
+  if (mt) mt.textContent = S.mit;
+  S.running = true; S.paused = false;
+  timeLeft = totalWork(); // always start fresh
+  timerInterval = setInterval(timerTick, 1000);
+  setTimerBtns();
+  showToast('🎯 Session started! Stay focused.');
+  saveState();
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval);
+  S.running = false; S.paused = true;
+  setTimerBtns();
+  showToast('⏸ Paused. Take a moment.');
+  saveState();
+}
+
+function resumeTimer() {
+  S.running = true; S.paused = false;
+  timerInterval = setInterval(timerTick, 1000);
+  setTimerBtns();
+  showToast('▶ Back to focus!');
+  saveState();
+}
+
+function stopTimer() {
+  if (S.strict && S.running) { startBreathing(); return; }
+  doStop();
+}
+
+function doStop() {
+  clearInterval(timerInterval);
+  S.running = false; S.paused = false; S.phase = 'work';
+  timeLeft = totalWork(); S.mit = '';
+  updateTimerDisplay(); setTimerBtns(); renderPlant();
+  showToast('Session ended. Great work!');
+  saveState();
+}
+
+function timerTick() {
+  timeLeft--;
+  updateTimerDisplay();
+  if (timeLeft <= 0) {
+    clearInterval(timerInterval);
+    if (S.phase === 'work') {
+      S.sessions++;
+      S.totalFocusMinutes = (S.totalFocusMinutes || 0) + S.workHrs * 60 + S.workMins;
+      S.focusLog.push({ date: new Date().toDateString(), hour: new Date().getHours(), dur: S.workHrs * 60 + S.workMins });
+      updateStreak();
+      // Check for level up
+      const newStage = getPlantStage(S.sessions);
+      const oldStage = getPlantStage(S.sessions - 1);
+      if (newStage.name !== oldStage.name) {
+        setTimeout(() => showLevelUp(newStage), 600);
+      }
+      renderPlant();
+      if (S.notif && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification('🍅 Session Complete!', { body: `Great work! ${S.sessions} sessions done.` });
+      }
+      showToast(`🍅 Session #${S.sessions} complete! 🎉`);
+    } else {
+      showToast('☕ Break over! Ready to focus?');
+    }
+    S.phase = S.phase === 'work' ? 'break' : 'work';
+    timeLeft = totalCurrent();
+    S.running = false; S.paused = false;
+    if (S.phase === 'break' && S.autoBreak) {
+      S.running = true;
+      timerInterval = setInterval(timerTick, 1000);
+    }
+    updateTimerDisplay(); setTimerBtns();
+    saveState();
+  }
+}
+
+function updateStreak() {
+  const today = new Date().toDateString();
+  if (S.lastSessionDate === today) return;
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  S.streak = S.lastSessionDate === yesterday ? (S.streak || 0) + 1 : 1;
+  S.lastSessionDate = today;
+}
+
+// ── Focus Plant ───────────────────────────────────────────────────────────────
+function renderPlant() {
+  const w = document.getElementById('plant-svg-wrap'); if (!w) return;
+  const stage = getPlantStage(S.sessions);
+  const si = getPlantStageIndex(S.sessions);
+
+  w.innerHTML = buildPlantSVG(S.sessions);
+
+  const pl = document.getElementById('plant-label');
+  if (pl) pl.textContent = stage.emoji + ' ' + stage.name;
+
+  const ps = document.getElementById('plant-sessions');
+  if (ps) ps.textContent = S.sessions + ' session' + (S.sessions !== 1 ? 's' : '') + ' completed';
+
+  // Progress to next stage
+  const nextStage = PLANT_STAGES[Math.min(si + 1, PLANT_STAGES.length - 1)];
+  const prevNeeded = stage.sessions;
+  const nextNeeded = nextStage.sessions;
+  const pct = si >= PLANT_STAGES.length - 1 ? 100
+    : Math.round((S.sessions - prevNeeded) / (nextNeeded - prevNeeded) * 100);
+  const pb = document.getElementById('plant-progress-bar');
+  if (pb) { pb.style.width = pct + '%'; }
+
+  const pp = document.getElementById('plant-progress');
+  if (pp) {
+    pp.textContent = si >= PLANT_STAGES.length - 1
+      ? '🏆 Champion reached! You did it!'
+      : `${nextNeeded - S.sessions} sessions to ${nextStage.emoji} ${nextStage.name}`;
+  }
+
+  // Stage dots
+  const dotsEl = document.getElementById('stage-dots');
+  if (dotsEl) {
+    dotsEl.innerHTML = PLANT_STAGES.map((st, i) => {
+      const cls = i < si ? 'stage-dot filled' : i === si ? 'stage-dot current' : 'stage-dot';
+      return `<div class="${cls}" title="${st.emoji} ${st.name} (${st.sessions} sessions)"></div>`;
+    }).join('');
+  }
+}
+
+function showPlantDetails() {
+  const stage = getPlantStage(S.sessions);
+  showToast(`${stage.emoji} ${stage.name} — ${stage.desc}`);
+}
+
+function showLevelUp(stage) {
+  const ov = document.getElementById('levelup-ov');
+  const nm = document.getElementById('levelup-name');
+  const ds = document.getElementById('levelup-desc');
+  const em = document.getElementById('levelup-emoji');
+  if (!ov) return;
+  if (em) em.textContent = stage.emoji;
+  if (nm) nm.textContent = stage.name;
+  if (ds) ds.textContent = stage.desc;
+  ov.style.display = 'flex';
+  const card = document.getElementById('levelup-card');
+  if (card) {
+    card.classList.toggle('glass-d', S.dark);
+    card.classList.toggle('glass-l', !S.dark);
+  }
+}
+
+function closeLevelUp() {
+  document.getElementById('levelup-ov').style.display = 'none';
+}
+
+// ── Soundscape ────────────────────────────────────────────────────────────────
+const SOUNDS = [['none','🔇','Silence'],['white','🌊','White'],['pink','🧠','Pink'],['lofi','🎹','Lo-fi']];
+function renderSoundGrid() {
+  const g = document.getElementById('sound-grid'); if (!g) return;
+  g.innerHTML = SOUNDS.map(([t, ico, lbl]) => {
+    const active = S.sound === t;
+    if (active) return `<button class="snd-btn-${S.dark?'d':'l'} snd-btn-active" onclick="playSound('${t}')">${ico} <span class="snd-txt">${lbl}</span></button>`;
+    if (S.dark)  return `<button class="snd-btn-d" onclick="playSound('${t}')">${ico} ${lbl}</button>`;
+    return `<button class="snd-btn-l" onclick="playSound('${t}')">${ico} <span class="snd-txt">${lbl}</span></button>`;
+  }).join('');
+  const vw = document.getElementById('vol-wrap');
+  if (vw) vw.style.display = S.sound === 'none' ? 'none' : 'block';
+  const vs = document.getElementById('vol-sl');
+  if (vs) vs.value = S.vol;
+}
+
+function getACtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function stopAudio() { audioNodes.forEach(n => { try { if (n.stop) n.stop(); else if (n.clear) n.clear(); } catch {} }); audioNodes = []; }
+
+function playSound(type) {
+  stopAudio(); S.sound = type; renderSoundGrid(); saveState();
+  if (type === 'none') return;
+  const ctx = getACtx(), gain = S.vol;
+  if (type === 'white' || type === 'pink') {
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 4, ctx.sampleRate), d = buf.getChannelData(0);
+    if (type === 'white') { for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+    else {
+      let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+      for (let i = 0; i < d.length; i++) {
+        const w = Math.random() * 2 - 1;
+        b0=.99886*b0+w*.0555179; b1=.99332*b1+w*.0750759; b2=.969*b2+w*.153852;
+        b3=.8665*b3+w*.3104856; b4=.55*b4+w*.5329522; b5=-.7616*b5-w*.016898;
+        d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11; b6=w*.115926;
+      }
+    }
+    const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+    const g = ctx.createGain(); g.gain.value = gain * .65;
+    src.connect(g); g.connect(ctx.destination); src.start();
+    audioNodes.push(src);
+  } else if (type === 'lofi') {
+    const notes = [261,294,330,349,392,349,330,294], nl = .72;
+    const gm = ctx.createGain(); gm.gain.value = gain * .38;
+    const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 2200;
+    gm.connect(f); f.connect(ctx.destination);
+    const pn = (fr, w) => {
+      const o = ctx.createOscillator(), ng = ctx.createGain();
+      o.type = 'triangle'; o.frequency.value = fr; o.connect(ng); ng.connect(gm);
+      ng.gain.setValueAtTime(0, w); ng.gain.linearRampToValueAtTime(.5, w + .06);
+      ng.gain.linearRampToValueAtTime(0, w + nl - .08); o.start(w); o.stop(w + nl);
+    };
+    const sch = () => { const now = ctx.currentTime; notes.forEach((fr, i) => { pn(fr*.5, now+i*nl); pn(fr, now+i*nl); }); };
+    sch(); const iv = setInterval(sch, notes.length * nl * 1000);
+    audioNodes.push({ stop: () => clearInterval(iv) });
+  }
+}
+
+function changeVol(v) { S.vol = parseFloat(v); if (S.sound !== 'none') { stopAudio(); playSound(S.sound); } saveState(); }
+
+// ── Breathing ─────────────────────────────────────────────────────────────────
+const BPHASES = [
+  { l: 'Breathe In',  d: 4, a: 'breathIn 4s ease-in-out forwards' },
+  { l: 'Hold',        d: 2, a: 'none' },
+  { l: 'Breathe Out', d: 4, a: 'breathOut 4s ease-in-out forwards' }
+];
+function startBreathing() {
+  S.breathStep = 0; S.breathRunning = true;
+  document.getElementById('breath-ov').style.display = 'flex';
+  runBreathStep();
+}
+function runBreathStep() {
+  if (!S.breathRunning) return;
+  const p = BPHASES[S.breathStep];
+  document.getElementById('breath-phase').textContent = p.l;
+  document.getElementById('breath-ring').style.animation = p.a;
+  let c = p.d;
+  document.getElementById('breath-num').textContent = c;
+  S.breathTimer = setInterval(() => {
+    c--; document.getElementById('breath-num').textContent = c;
+    if (c <= 0) {
+      clearInterval(S.breathTimer); S.breathStep++;
+      if (S.breathStep >= BPHASES.length) {
+        document.getElementById('breath-ov').style.display = 'none';
+        S.breathRunning = false; doStop();
+      } else { runBreathStep(); }
+    }
+  }, 1000);
+}
+function cancelBreath() {
+  clearInterval(S.breathTimer); S.breathRunning = false;
+  document.getElementById('breath-ov').style.display = 'none';
+}
+
+// ── Calendar ──────────────────────────────────────────────────────────────────
+function pad2(n) { return String(n).padStart(2, '0'); }
+function renderCalendar() {
+  const { calYear: y, calMonth: m } = S, today = new Date();
+  const dim = new Date(y, m + 1, 0).getDate(), fd = new Date(y, m, 1).getDay();
+  const mn = new Date(y, m, 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+  const tc = S.dark ? '#64748b' : '#94a3b8';
+  document.getElementById('panel-calendar').innerHTML = `
+  <div style="display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,270px);gap:15px">
+    <div class="glass glass-l" style="padding:22px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <button class="btn ${S.dark?'btn-o-d':'btn-o-l'} btn-sm" onclick="navMonth(-1)">‹ Prev</button>
+        <div class="gtext" style="font-size:20px;font-weight:900">${mn}</div>
+        <button class="btn ${S.dark?'btn-o-d':'btn-o-l'} btn-sm" onclick="navMonth(1)">Next ›</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;margin-bottom:6px">
+        ${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div style="text-align:center;font-size:10px;font-weight:800;padding:3px 0;color:${tc}">${d}</div>`).join('')}
+      </div>
+      <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      ${S.dark
+        ? `<button class="btn btn-g" style="width:100%;padding:11px 22px;color:#fff" onclick="openEvModal()">+ Add Event</button>`
+        : `<button class="btn-addev" onclick="openEvModal()"><span class="btn-addev-txt">+ Add Event</span></button>`}
+      <div class="glass glass-l" style="padding:17px;flex:1">
+        <div class="gtext" id="ev-list-title" style="font-size:15px;font-weight:900;margin-bottom:12px">Events</div>
+        <div id="ev-list" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto"></div>
+      </div>
+    </div>
+  </div>`;
+  const grid = document.getElementById('cal-grid');
+  for (let i = 0; i < fd; i++) grid.appendChild(document.createElement('div'));
+  for (let d = 1; d <= dim; d++) {
+    const ds = `${y}-${pad2(m+1)}-${pad2(d)}`;
+    const evs = S.events.filter(e => e.date === ds).sort((a,b) => a.startTime.localeCompare(b.startTime));
+    const isToday = d === today.getDate() && m === today.getMonth() && y === today.getFullYear();
+    const isSel = S.calSel === d;
+    const el = document.createElement('div'); el.className = 'cal-day';
+    el.style.background = isToday ? 'linear-gradient(135deg,rgba(5,150,105,.15),rgba(2,132,199,.15))'
+      : isSel ? (S.dark ? 'rgba(5,150,105,.18)' : 'rgba(5,150,105,.08)') : 'transparent';
+    el.style.borderColor = isToday ? 'rgba(5,150,105,.4)' : isSel ? 'rgba(5,150,105,.25)' : 'transparent';
+    el.innerHTML = `<div style="font-size:12.5px;font-weight:${isToday?900:700};color:${isToday?'#059669':S.dark?'#e2e8f0':'#1e293b'}">${d}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:3px">${evs.slice(0,4).map(ev=>`<span class="ev-dot" style="background:${ev.color}"></span>`).join('')}</div>`;
+    el.onclick = () => { S.calSel = S.calSel === d ? null : d; renderCalendar(); renderEventList(); saveState(); };
+    grid.appendChild(el);
+  }
+  applyDark();
+}
+function navMonth(d) {
+  S.calMonth += d;
+  if (S.calMonth > 11) { S.calMonth = 0; S.calYear++; }
+  else if (S.calMonth < 0) { S.calMonth = 11; S.calYear--; }
+  S.calSel = null; renderCalendar(); renderEventList(); saveState();
+}
+function renderEventList() {
+  const { calYear: y, calMonth: m } = S;
+  const evs = S.calSel
+    ? S.events.filter(e => e.date === `${y}-${pad2(m+1)}-${pad2(S.calSel)}`).sort((a,b) => a.startTime.localeCompare(b.startTime))
+    : S.events.slice().sort((a,b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime)).slice(0, 10);
+  const tEl = document.getElementById('ev-list-title');
+  if (tEl) tEl.textContent = S.calSel ? `${m+1}/${S.calSel} Events` : 'Upcoming Events';
+  const list = document.getElementById('ev-list'); if (!list) return;
+  list.innerHTML = evs.length === 0
+    ? `<div style="font-size:13px;font-weight:600;color:#94a3b8">No events</div>`
+    : evs.map(ev => `<div class="slide-up" style="padding:10px 13px;border-radius:13px;background:${S.dark?'rgba(255,255,255,.06)':'rgba(255,255,255,.88)'};border-left:4px solid ${ev.color};display:flex;justify-content:space-between;align-items:flex-start;transition:transform .14s" onmouseenter="this.style.transform='translateX(3px)'" onmouseleave="this.style.transform=''">
+      <div>
+        <div style="font-size:12.5px;font-weight:800;color:${S.dark?'#e2e8f0':'#1e293b'}">${ev.title}</div>
+        <div style="font-size:10.5px;font-weight:600;margin-top:2px;color:${S.dark?'#94a3b8':'#64748b'}">${ev.date} · ${ev.startTime}–${ev.endTime}</div>
+      </div>
+      <button onclick="deleteEvent(${ev.id})" style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:17px;padding:0 2px;transition:color .15s" onmouseenter="this.style.color='#dc2626'" onmouseleave="this.style.color='#94a3b8'">×</button>
+    </div>`).join('');
+}
+function openEvModal() {
+  const { calYear: y, calMonth: m } = S, today = new Date();
+  document.getElementById('ev-date').value = `${y}-${pad2(m+1)}-${pad2(S.calSel || today.getDate())}`;
+  document.getElementById('ev-title').value = '';
+  document.getElementById('ev-start').value = '';
+  document.getElementById('ev-end').value = '';
+  document.getElementById('ev-err').style.display = 'none';
+  document.getElementById('ev-warn').style.display = 'none';
+  S.evColor = '#059669'; renderSwatches();
+  document.getElementById('ev-ov').style.display = 'flex';
+  const card = document.getElementById('ev-card');
+  card.classList.toggle('glass-d', S.dark); card.classList.toggle('glass-l', !S.dark);
+  ['ev-title','ev-date','ev-start','ev-end'].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    if (S.dark) { el.classList.add('inp-d'); el.classList.remove('inp-l'); }
+    else { el.classList.add('inp-l'); el.classList.remove('inp-d'); }
+  });
+  ['st-lbl','et-lbl','col-lbl'].forEach(id => { const el = document.getElementById(id); if (el) el.style.color = S.dark ? '#94a3b8' : '#64748b'; });
+  const cc = document.getElementById('ev-cancel-btn');
+  if (cc) { cc.className = 'btn ' + (S.dark ? 'btn-o-d' : 'btn-o-l'); cc.style.padding = '9px 18px'; }
+  setTimeout(() => document.getElementById('ev-title').focus(), 100);
+}
+function renderSwatches() {
+  document.getElementById('color-swatches').innerHTML = ['#059669','#0284c7','#7c3aed','#dc2626','#f59e0b','#ec4899'].map(c =>
+    `<span onclick="setEvColor('${c}')" style="display:inline-block;width:23px;height:23px;border-radius:50%;background:${c};cursor:pointer;margin-right:6px;border:${S.evColor===c?'3px solid #fff':'3px solid transparent'};box-shadow:${S.evColor===c?'0 0 0 2.5px '+c:'none'};transition:all .14s;transform:${S.evColor===c?'scale(1.2)':'scale(1)'}"></span>`
+  ).join('');
+}
+function setEvColor(c) { S.evColor = c; renderSwatches(); }
+function closeEvModal() { document.getElementById('ev-ov').style.display = 'none'; }
+function saveEvent() {
+  const title = document.getElementById('ev-title').value.trim();
+  const date  = document.getElementById('ev-date').value;
+  const st    = document.getElementById('ev-start').value;
+  const et    = document.getElementById('ev-end').value;
+  const errEl = document.getElementById('ev-err'), warnEl = document.getElementById('ev-warn');
+  errEl.style.display = 'none'; warnEl.style.display = 'none';
+  if (!title || !date || !st || !et) { errEl.textContent = 'Please fill in all fields.'; errEl.style.display = 'block'; return; }
+  if (et <= st) { errEl.textContent = 'End time must be after start time.'; errEl.style.display = 'block'; return; }
+  const exact = S.events.find(e => e.date === date && e.startTime === st && e.title.toLowerCase() === title.toLowerCase());
+  if (exact) { errEl.textContent = `⛔ Event already exists: "${exact.title}" at ${exact.startTime} on ${date}.`; errEl.style.display = 'block'; return; }
+  const conflict = S.events.find(e => e.date === date && e.startTime === st);
+  if (conflict) { warnEl.textContent = `⚠️ "${conflict.title}" also starts at ${st}. Both events added.`; warnEl.style.display = 'block'; }
+  S.events.push({ id: Date.now(), title, date, startTime: st, endTime: et, color: S.evColor });
+  saveState();
+  setTimeout(() => { closeEvModal(); renderCalendar(); renderEventList(); }, conflict ? 1400 : 0);
+}
+function deleteEvent(id) {
+  S.events = S.events.filter(e => e.id !== id);
+  saveState(); renderCalendar(); renderEventList();
+  showToast('Event removed');
+}
+// Close modals on overlay click
+document.getElementById('ev-ov').addEventListener('click', e => { if (e.target === document.getElementById('ev-ov')) closeEvModal(); });
+document.getElementById('levelup-ov').addEventListener('click', e => { if (e.target === document.getElementById('levelup-ov')) closeLevelUp(); });
+
+// ── Insights ──────────────────────────────────────────────────────────────────
+function renderInsights() {
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  // Use real focus log data only (no faked random data for core stats)
+  const realDayTotals = Array(7).fill(0);
+  const hdata = Array(7).fill(null).map((_, di) =>
+    Array(24).fill(null).map((_, h) =>
+      S.focusLog.filter(f => { const d = new Date(f.date); return d.getDay() === di && f.hour === h; }).reduce((a,f) => a + f.dur, 0)
+    )
+  );
+  // Build bar chart data from actual log
+  const bdata = Array(7).fill(null).map((_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - (6 - i));
+    const real = S.focusLog.filter(f => f.date === d.toDateString()).reduce((a,f) => a + f.dur, 0);
+    return { name: d.toLocaleString('default', { weekday: 'short' }), mins: real };
+  });
+  const total = bdata.reduce((a,b) => a + b.mins, 0);
+  const avg = Math.round(total / 7);
+  const maxH = Math.max(...hdata.flat(), 1);
+  const peakIdx = hdata.flat().indexOf(Math.max(...hdata.flat()));
+  const peakHr = peakIdx % 24;
+  const tc = S.dark ? '#94a3b8' : '#64748b', bc = S.dark ? '#64748b' : '#94a3b8';
+  const hcell = v => {
+    if (v === 0) return S.dark ? 'rgba(5,150,105,.08)' : 'rgba(5,150,105,.06)';
+    const t = v / maxH;
+    if (t < .33) return `rgba(5,150,105,${(.2 + t*.4).toFixed(2)})`;
+    if (t < .67) return `rgba(2,132,199,${(.3 + t*.5).toFixed(2)})`;
+    return `rgba(14,116,144,${(.6 + t*.4).toFixed(2)})`;
+  };
+  const totalHrs = Math.floor(S.totalFocusMinutes / 60);
+  const totalMin = S.totalFocusMinutes % 60;
+  document.getElementById('panel-insights').innerHTML = `
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px">
+    ${[
+      ['🎯','Total Sessions', S.sessions, 'completed'],
+      ['⏱️','Focus This Week', total + 'm', 'minutes logged'],
+      ['🔥','All-Time Focus', totalHrs > 0 ? totalHrs + 'h ' + totalMin + 'm' : total + 'm', 'total effort']
+    ].map(([ico, lbl, val, sub]) => `
+    <div class="glass glass-l slide-up" style="padding:18px 20px;text-align:center;cursor:default" onmouseenter="this.style.transform='translateY(-3px)'" onmouseleave="this.style.transform=''">
+      <div style="font-size:26px;margin-bottom:5px">${ico}</div>
+      <div class="gtext" style="font-size:26px;font-weight:900">${val}</div>
+      <div style="font-size:12px;font-weight:800;margin-top:2px;color:${S.dark?'#e2e8f0':'#1e293b'}">${lbl}</div>
+      <div style="font-size:11px;font-weight:600;color:${bc}">${sub}</div>
+    </div>`).join('')}
+  </div>
+  <div class="glass glass-l" style="padding:22px;margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+      <div class="gtext" style="font-size:19px;font-weight:900">📊 Daily Focus (last 7 days)</div>
+      <div style="font-size:12px;font-weight:700;color:${tc}">avg ${avg} min/day</div>
+    </div>
+    <canvas id="ins-bar" height="160"></canvas>
+  </div>
+  <div class="glass glass-l" style="padding:22px;overflow-x:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div class="gtext" style="font-size:19px;font-weight:900">🔥 Peak Hours Heatmap</div>
+      <div style="background:rgba(5,150,105,.1);border-radius:11px;padding:6px 12px;font-size:12px;font-weight:800;color:#059669">🕐 Peak: ${peakHr}:00–${peakHr+1}:00</div>
+    </div>
+    <div id="hmap" style="display:grid;grid-template-columns:36px repeat(24,1fr);gap:3px;min-width:560px"></div>
+    <div style="display:flex;align-items:center;gap:5px;margin-top:10px">
+      <span style="font-size:10px;font-weight:700;color:${bc}">Less</span>
+      ${[0,.2,.4,.6,.8,1].map(t=>`<div style="width:13px;height:13px;border-radius:3px;background:${hcell(t*maxH)}"></div>`).join('')}
+      <span style="font-size:10px;font-weight:700;color:${bc}">More</span>
+    </div>
+  </div>`;
+  const hm = document.getElementById('hmap');
+  hm.appendChild(document.createElement('div'));
+  for (let h = 0; h < 24; h++) {
+    const el = document.createElement('div');
+    el.style.cssText = `text-align:center;font-size:9px;font-weight:700;color:${bc};padding-bottom:3px`;
+    el.textContent = h % 6 === 0 ? h + 'h' : ''; hm.appendChild(el);
+  }
+  days.forEach((day, di) => {
+    const lbl = document.createElement('div');
+    lbl.style.cssText = `font-size:10.5px;font-weight:800;color:${tc};display:flex;align-items:center;padding-right:4px`;
+    lbl.textContent = day; hm.appendChild(lbl);
+    for (let h = 0; h < 24; h++) {
+      const el = document.createElement('div');
+      el.style.cssText = `height:17px;border-radius:4px;background:${hcell(hdata[di][h])};cursor:default;transition:transform .12s`;
+      el.title = `${day} ${h}:00 – ${hdata[di][h]} min`;
+      el.onmouseenter = e => e.target.style.transform = 'scale(1.32)';
+      el.onmouseleave = e => e.target.style.transform = 'scale(1)';
+      hm.appendChild(el);
+    }
+  });
+  if (barChart) barChart.destroy();
+  barChart = new Chart(document.getElementById('ins-bar').getContext('2d'), {
+    type: 'bar',
+    data: { labels: bdata.map(d=>d.name), datasets: [{ data: bdata.map(d=>d.mins), backgroundColor: bdata.map(d=>d.mins > avg ? '#059669' : 'rgba(5,150,105,.45)'), borderRadius: 10, borderSkipped: false }] },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => v.raw + ' min' }, backgroundColor: S.dark ? 'rgba(15,30,50,.97)' : 'rgba(255,255,255,.97)', titleColor: S.dark ? '#e2e8f0' : '#1e293b', bodyColor: S.dark ? '#94a3b8' : '#64748b', borderColor: 'rgba(5,150,105,.2)', borderWidth: 1 } },
+      scales: { x: { grid: { display: false }, ticks: { color: tc, font: { weight: '700', size: 12 } } }, y: { grid: { color: S.dark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.05)' }, ticks: { color: bc, font: { size: 11 } } } }
+    }
+  });
+}
+
+// ── Settings ──────────────────────────────────────────────────────────────────
+function renderSettings() {
+  const tc = S.dark ? '#e2e8f0' : '#1e293b', mc = S.dark ? '#94a3b8' : '#64748b', br = S.dark ? 'rgba(5,150,105,.15)' : 'rgba(5,150,105,.1)';
+  document.getElementById('panel-settings').innerHTML = `
+  <div class="glass glass-l" style="padding:26px">
+    <div class="gtext" style="font-size:22px;font-weight:900;margin-bottom:18px">⚙️ Settings</div>
+    ${[
+      ['🌙 Dark Mode',       'Rich dark theme — easier on the eyes at night',       'dark'],
+      ['🔒 Strict Mode',     'Breathing exercise required before stopping',          'strict'],
+      ['🔔 Notifications',   'Get notified when sessions end (browser permission)',  'notif'],
+      ['☕ Auto-Start Break','Auto-start break timer after work ends',               'autoBreak']
+    ].map(([lbl, desc, key]) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid ${br}">
+      <div><div style="font-size:14.5px;font-weight:800;color:${tc}">${lbl}</div><div style="font-size:12px;font-weight:600;color:${mc};margin-top:2px">${desc}</div></div>
+      <label class="tog"><input type="checkbox" ${S[key]?'checked':''} onchange="toggleSetting('${key}',this.checked)"><span class="sli"></span></label>
+    </div>`).join('')}
+    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn ${S.dark?'btn-o-d':'btn-o-l'} btn-sm" onclick="resetProgress()" style="font-size:12px">🔄 Reset Progress</button>
+      <button class="btn ${S.dark?'btn-o-d':'btn-o-l'} btn-sm" onclick="exportData()" style="font-size:12px">📤 Export Data</button>
+    </div>
+    <div style="margin-top:16px;padding:15px 18px;border-radius:16px;background:linear-gradient(135deg,rgba(5,150,105,.07),rgba(2,132,199,.07));border:1.5px solid rgba(5,150,105,.12)">
+      <div style="font-size:13px;font-weight:800;color:#059669;margin-bottom:7px">💡 Guide</div>
+      <div style="font-size:12.5px;font-weight:600;line-height:1.8;color:${mc}">
+        <b style="color:#059669">🍅 Pomodoro:</b> Set hours &amp; minutes for work and break. Work in focused sprints.<br>
+        <b style="color:#059669">🌱 Focus Plant:</b> Grows through 10 stages across 20 sessions — reach Champion!<br>
+        <b style="color:#059669">💾 Auto-Save:</b> Your progress is saved automatically in your browser.<br>
+        <b style="color:#059669">🧠 Pink Noise:</b> Filtered audio proven to improve focus &amp; memory consolidation.
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:8px 14px;border-radius:12px;background:rgba(5,150,105,.06);font-size:11px;font-weight:700;color:${mc}">
+      Storage: ${getStorageSize()} used · ${S.sessions} sessions · ${S.focusLog.length} log entries
+    </div>
+  </div>`;
+}
+
+function getStorageSize() {
+  try { const s = JSON.stringify(S); return Math.round(s.length / 1024) + ' KB'; } catch { return '?'; }
+}
+
+function resetProgress() {
+  if (!confirm('Reset all progress? This clears sessions, plant growth, focus log, and streak. Events are kept.')) return;
+  S.sessions = 0; S.focusLog = []; S.streak = 0; S.lastSessionDate = null; S.totalFocusMinutes = 0;
+  saveState();
+  renderFocus();
+  showToast('Progress reset. Start fresh! 🌱');
+  renderSettings();
+}
+
+function exportData() {
+  const data = { sessions: S.sessions, totalFocusMinutes: S.totalFocusMinutes, streak: S.streak, focusLog: S.focusLog, events: S.events };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'studyflow_data.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('📤 Data exported!');
+}
+
+function toggleSetting(key, val) {
+  S[key] = val;
+  if (key === 'notif' && val && 'Notification' in window) {
+    Notification.requestPermission().then(p => { if (p !== 'granted') showToast('⚠️ Notification permission denied'); });
+  }
+  if (key === 'dark') {
+    applyDark(); buildTabBar();
+    if (S.tab === 'insights') renderInsights();
+    else if (S.tab === 'settings') renderSettings();
+    else if (S.tab === 'calendar') { renderCalendar(); renderEventList(); }
+    else if (S.tab === 'focus') renderFocus();
+  } else if (key === 'strict') {
+    const sw = document.getElementById('strict-warn');
+    if (sw) sw.style.display = val && (S.running || S.paused) ? 'block' : 'none';
+  }
+  saveState();
+}
+
+// ── Keyboard shortcuts ────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  // Only on focus tab, not inside inputs
+  if (document.activeElement.tagName === 'INPUT') return;
+  if (e.key === ' ' || e.code === 'Space') {
+    e.preventDefault();
+    if (S.running) pauseTimer();
+    else if (S.paused) resumeTimer();
+  }
+  if (e.key === 'Escape') {
+    if (document.getElementById('ev-ov').style.display !== 'none') closeEvModal();
+    if (document.getElementById('levelup-ov').style.display !== 'none') closeLevelUp();
+    if (document.getElementById('breath-ov').style.display !== 'none') cancelBreath();
+  }
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+// Restore timer state
+if (S.phase === 'work') timeLeft = totalWork();
+else timeLeft = totalBreak();
+
+buildTabBar();
+renderFocus();
+applyDark();
+</script>
+</body>
+</html>
